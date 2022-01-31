@@ -6,12 +6,12 @@ CFLAGS = -std=c++17 -Wall -Wextra
 # library linker commands (start with -l)
 LOADLIBS =
 
-# finds all objects that corrispond to .cpp files (system agnostic)
-OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(wildcard $(SRC_DIR)/*.cpp))
+SOURCES := $(shell find $(SRC_DIR) -type f -name '*.cpp')
+OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
 
 .PHONY: all
 all:
-	mkdir -p $(BUILD_DIR)
+	for dirname in $$(find $(SRC_DIR) -type d | sed 's/'$(SRC_DIR)'/'$(BUILD_DIR)'/'); do mkdir -p $$dirname; done
 	+$(MAKE) $(TARGET)
 
 $(TARGET): $(OBJECTS)
