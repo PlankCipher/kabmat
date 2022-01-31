@@ -1,8 +1,10 @@
+#include "helpers/ArgsParser/ArgsParser.h"
 #include <iostream>
 
 using namespace std;
 
-int main() {
-  cout << "Hello There" << endl;
+int main(int argc, char **argv) {
+  ArgsParser args_parser(argc, argv);
+
   return 0;
 }
