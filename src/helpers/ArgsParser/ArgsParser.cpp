@@ -61,7 +61,8 @@ void ArgsParser::usage() {
 
   cout << "Options: " << endl;
   cout << "  -h, --help             print this help message" << endl;
-  cout << "  -v, --version          print program version" << endl;
+  cout << "  -v, --version          print program version" << endl << endl;
+
   cout << "  -l, --list             list all boards" << endl;
   cout << "  -c, --create <name>    create a new board with the name <name>"
        << endl;

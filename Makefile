@@ -1,6 +1,8 @@
 TARGET = kabmat
 SRC_DIR = src
 BUILD_DIR = bin
+INSTALL_DIR = /usr/bin/
+
 CFLAGS = -std=c++17 -Wall -Wextra
 
 # library linker commands (start with -l)
@@ -23,3 +25,8 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 .PHONY: clean
 clean:
 	-rm -rf $(BUILD_DIR) $(TARGET)
+
+.PHONY: install
+install:
+	$(MAKE)
+	sudo cp ./$(TARGET) $(INSTALL_DIR)
