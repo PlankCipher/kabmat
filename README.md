@@ -1,4 +1,4 @@
-# kabmat
+# kabmat (WIP)
 
 TUI program for managing kanban boards with vim-like keybindings
 
