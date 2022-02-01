@@ -11,14 +11,23 @@ ArgsParser::ArgsParser(int argc, char **argv) {
       string argument = argv[i];
       string value = "";
 
-      vector<string> no_value_args = {"-v",        "-h",     "-l",
-                                      "--version", "--help", "--list"};
+      vector<string> all_args = {"-h", "--help", "-v", "--version",
+                                 "-l", "--list", "-c", "--create",
+                                 "-o", "--open", "-d", "--delete"};
 
-      if (find(no_value_args.begin(), no_value_args.end(), argv[i]) ==
+      if (find(all_args.begin(), all_args.end(), argument) == all_args.end()) {
+        fprintf(stderr, "ERROR: Unknown option `%s`\n", argument.c_str());
+        exit(1);
+      }
+
+      vector<string> no_value_args = {"-h",        "--help", "-v",
+                                      "--version", "-l",     "--list"};
+
+      if (find(no_value_args.begin(), no_value_args.end(), argument) ==
           no_value_args.end()) {
         if (i + 1 >= argc) {
-          printf("ERROR: Not enough arguments for option `%s`\n",
-                 argument.c_str());
+          fprintf(stderr, "ERROR: Not enough arguments for option `%s`\n",
+                  argument.c_str());
           exit(1);
         }
 
