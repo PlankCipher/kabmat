@@ -1,9 +1,9 @@
-#include "ArgsParser.h"
 #include <algorithm>
-#include <string.h>
+#include <iostream>
 #include <vector>
 
-using namespace std;
+#include "../helpers/consts.h"
+#include "ArgsParser.h"
 
 ArgsParser::ArgsParser(int argc, char **argv) {
   if (argc > 1) {

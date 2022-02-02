@@ -1,10 +1,7 @@
 #pragma once
 
-#include <iostream>
+#include <string>
 #include <unordered_map>
-
-#define NAME "kabmat"
-#define VERSION "1.0.0"
 
 using namespace std;
 
