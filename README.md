@@ -4,7 +4,7 @@ TUI program for managing kanban boards with vim-like keybindings
 
 ## Installation
 
-After the command below runs successfully, there should be a `kabmat` executable file in `/usr/bin/` (sudo privileges required).
+After the command below runs successfully, there should be a `kabmat` executable file in `/usr/bin/` (sudo privileges required to copy it to there).
 
 ```sh
 $ make install
