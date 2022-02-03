@@ -5,7 +5,7 @@
 #include "../helpers/consts.h"
 #include "ArgsParser.h"
 
-ArgsParser::ArgsParser(int argc, char **argv) {
+ArgsParser::ArgsParser(int argc, char **argv, DataManager *data_manager) {
   if (argc > 1) {
     for (int i = 1; i < argc; i += 2) {
       string argument = argv[i];
@@ -40,24 +40,28 @@ ArgsParser::ArgsParser(int argc, char **argv) {
       }
 
       this->arguments[argument] = value;
-      this->parse_argument(argument, value);
+      this->parse_argument(argument, value, data_manager);
     }
   }
 }
 
-void ArgsParser::parse_argument(string argument, string value) {
+void ArgsParser::parse_argument(string argument, string value,
+                                DataManager *data_manager) {
   if (argument.compare("-v") == 0 || argument.compare("--version") == 0)
     cout << NAME << ' ' << VERSION << endl;
   else if (argument.compare("-h") == 0 || argument.compare("--help") == 0)
     this->usage();
   else if (argument.compare("-c") == 0 || argument.compare("--create") == 0)
-    cout << "CREATING A NEW BOARD WITH THE NAME " << value << endl;
+    data_manager->create_board(value);
   else if (argument.compare("-l") == 0 || argument.compare("--list") == 0)
-    cout << "LISTING ALL BOARDS" << endl;
+    for (size_t i = 0; i < data_manager->boards.size(); ++i)
+      cout << data_manager->boards[i].name << endl;
   else if (argument.compare("-o") == 0 || argument.compare("--open") == 0)
+    // TODO: opening boards is not implemented
+    // TODO: (will be impl. after implementing UI)
     cout << "OPENING THE BOARD WITH THE NAME " << value << endl;
   else if (argument.compare("-d") == 0 || argument.compare("--delete") == 0)
-    cout << "DELETING THE BOARD WITH THE NAME " << value << endl;
+    data_manager->delete_board(value);
 }
 
 void ArgsParser::usage() {
