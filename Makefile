@@ -7,7 +7,7 @@ DATA_DIR = ~/.local/share/kabmat
 CFLAGS = -std=c++17 -Wall -Wextra
 
 # library linker commands (start with -l)
-LOADLIBS =
+LOADLIBS = -lncurses
 
 SOURCES := $(shell find $(SRC_DIR) -type f -name '*.cpp')
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
