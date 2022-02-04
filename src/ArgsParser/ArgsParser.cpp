@@ -54,20 +54,24 @@ void ArgsParser::parse_argument(string argument, string value,
   } else if (argument.compare("-h") == 0 || argument.compare("--help") == 0) {
     config->tui_enabled = false;
     this->usage();
-  } else if (argument.compare("-c") == 0 || argument.compare("--create") == 0)
+  } else if (argument.compare("-c") == 0 || argument.compare("--create") == 0) {
     data_manager->create_board(value);
-  else if (argument.compare("-l") == 0 || argument.compare("--list") == 0) {
+  } else if (argument.compare("-l") == 0 || argument.compare("--list") == 0) {
     config->tui_enabled = false;
     for (size_t i = 0; i < data_manager->boards.size(); ++i)
       cout << data_manager->boards[i].name << endl;
-  } else if (argument.compare("-o") == 0 || argument.compare("--open") == 0)
-    // TODO: opening boards is not implemented
-    // TODO: (will be impl. after implementing UI)
-    cout << "OPENING THE BOARD WITH THE NAME " << value << endl;
-  else if (argument.compare("-d") == 0 || argument.compare("--delete") == 0)
+  } else if (argument.compare("-o") == 0 || argument.compare("--open") == 0) {
+    for (size_t i = 0; i < data_manager->boards.size(); ++i) {
+      if (data_manager->boards[i].name == value) {
+        config->default_board = value;
+        break;
+      }
+    }
+  } else if (argument.compare("-d") == 0 || argument.compare("--delete") == 0) {
     data_manager->delete_board(value);
-  else if (argument.compare("-t") == 0 || argument.compare("--text") == 0)
+  } else if (argument.compare("-t") == 0 || argument.compare("--text") == 0) {
     config->tui_enabled = false;
+  }
 }
 
 void ArgsParser::usage() {
