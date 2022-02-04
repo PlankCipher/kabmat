@@ -13,7 +13,7 @@ $ make install
 ## Usage
 
 ```
-kabmat 1.0.0
+kabmat 1.1.0
 TUI program for managing kanban boards with vim-like keybindings
 
 Usage: kabmat [OPTION]...
@@ -26,4 +26,6 @@ Options:
   -c, --create <name>    create a new board with the name <name>
   -o, --open <name>      open board with name <name>
   -d, --delete <name>    delete board with name <name>
+
+  -t, --text             disable tui
 ```
