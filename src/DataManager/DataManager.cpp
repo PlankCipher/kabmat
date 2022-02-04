@@ -55,24 +55,16 @@ void DataManager::create_board(string name) {
 }
 
 void DataManager::delete_board(string name) {
+  this->does_board_exist(name);
+
   vector<Board> *boards = &this->boards;
 
-  bool found = false;
-
   for (vector<Board>::reverse_iterator i = boards->rbegin();
-       i != boards->rend(); ++i) {
-    if ((*i).name == name) {
+       i != boards->rend(); ++i)
+    if ((*i).name == name)
       boards->erase(i.base() - 1);
-      found = true;
-    }
-  }
 
-  if (found)
-    this->write_data_to_file();
-  else {
-    fprintf(stderr, "ERROR: No board named \"%s\" was found\n", name.c_str());
-    exit(1);
-  }
+  this->write_data_to_file();
 }
 
 vector<string> DataManager::parse_data_if_valid() {
@@ -153,4 +145,15 @@ void DataManager::write_data_to_file() {
             DATA_FILE.c_str());
     exit(1);
   }
+}
+
+void DataManager::does_board_exist(string name) {
+  for (size_t i = 0; i < this->boards.size(); ++i) {
+    if (this->boards[i].name == name) {
+      return;
+    }
+  }
+
+  fprintf(stderr, "ERROR: No board named \"%s\" was found\n", name.c_str());
+  exit(1);
 }

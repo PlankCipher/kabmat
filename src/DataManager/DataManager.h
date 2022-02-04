@@ -15,6 +15,8 @@ public:
   void create_board(string name);
   void delete_board(string name);
 
+  void does_board_exist(string name);
+
   vector<Board> boards;
 
 private:
