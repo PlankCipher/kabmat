@@ -15,8 +15,8 @@ MainMenu::MainMenu(DataManager *data_manager) {
 
   this->window = newwin(this->height, this->width, center_y, center_x);
 
-  // starts at 2 because: one row for
-  // border and the other for space
+  // 0th row for menu title and
+  // 1st one for space, hence 2
   this->items_start_y = 2;
 
   this->highlighted_index = 0;
@@ -73,13 +73,7 @@ void MainMenu::show() {
 
 void MainMenu::draw_menu_items() {
   if (this->boards_count > 0) {
-    // clear any previous highlights
-    for (size_t i = 0; i < this->scroll_window_height; ++i) {
-      mvwchgat(this->window, i + this->items_start_y, 1, this->width - 2,
-               A_NORMAL, 0, NULL);
-    }
-
-    // boards list
+    // draw boards list
     vector<string> boards_menu =
         vector<string>(this->scroll_window_start, this->scroll_window_end);
 
@@ -96,7 +90,7 @@ void MainMenu::draw_menu_items() {
     refresh();
     wrefresh(this->window);
   } else {
-    string create_board_hint = "n to create a new board";
+    string create_board_hint = "c to create a new board";
     int center_x = win_center_x(this->window, &create_board_hint);
     mvwprintw(this->window, this->items_start_y, center_x, "%s",
               create_board_hint.c_str());
