@@ -27,9 +27,10 @@ int main(int argc, char **argv) {
     use_default_colors();
 
     init_pair(COLOR_PAIR_FOOTER, COLOR_BLACK, COLOR_WHITE);
+    init_pair(COLOR_PAIR_BORDER, COLOR_WHITE, -1);
 
     if (config.default_board == "") {
-      MainMenu main_menu;
+      MainMenu main_menu(data_manager);
       main_menu.show();
     }
 

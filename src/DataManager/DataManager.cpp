@@ -157,3 +157,10 @@ void DataManager::does_board_exist(string name) {
   fprintf(stderr, "ERROR: No board named \"%s\" was found\n", name.c_str());
   exit(1);
 }
+
+vector<string> DataManager::get_boards_names() {
+  vector<string> boards_names;
+  for (size_t i = 0; i < this->boards.size(); ++i)
+    boards_names.push_back(this->boards[i].name);
+  return boards_names;
+}

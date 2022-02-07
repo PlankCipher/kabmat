@@ -16,6 +16,7 @@ public:
   void delete_board(string name);
 
   void does_board_exist(string name);
+  vector<string> get_boards_names();
 
   vector<Board> boards;
 

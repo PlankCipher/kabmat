@@ -58,8 +58,9 @@ void ArgsParser::parse_argument(string argument, string value,
     data_manager->create_board(value);
   } else if (argument.compare("-l") == 0 || argument.compare("--list") == 0) {
     config->tui_enabled = false;
-    for (size_t i = 0; i < data_manager->boards.size(); ++i)
-      cout << data_manager->boards[i].name << endl;
+    vector<string> boards_names = data_manager->get_boards_names();
+    for (size_t i = 0; i < boards_names.size(); ++i)
+      cout << boards_names[i] << endl;
   } else if (argument.compare("-o") == 0 || argument.compare("--open") == 0) {
     data_manager->does_board_exist(value);
     config->default_board = value;
