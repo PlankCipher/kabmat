@@ -6,7 +6,7 @@
 
 class MainMenu {
 public:
-  MainMenu(DataManager data_manager);
+  MainMenu(DataManager *data_manager);
 
   void show();
 
@@ -25,4 +25,6 @@ private:
   size_t scroll_window_height;
   vector<string>::iterator scroll_window_start;
   vector<string>::iterator scroll_window_end;
+
+  DataManager *data_manager;
 };

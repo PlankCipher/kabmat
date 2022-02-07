@@ -3,7 +3,7 @@
 #include "../../components/Footer/Footer.h"
 #include "../../helpers/win_center_text/win_center_text.h"
 
-MainMenu::MainMenu(DataManager data_manager) {
+MainMenu::MainMenu(DataManager *data_manager) {
   int y_max, x_max;
   getmaxyx(stdscr, y_max, x_max);
 
@@ -20,7 +20,7 @@ MainMenu::MainMenu(DataManager data_manager) {
   this->items_start_y = 2;
 
   this->highlighted_index = 0;
-  this->boards_names = data_manager.get_boards_names();
+  this->boards_names = data_manager->get_boards_names();
   this->boards_count = this->boards_names.size();
   this->scroll_window_height = this->height - items_start_y - 1;
 
@@ -30,6 +30,8 @@ MainMenu::MainMenu(DataManager data_manager) {
         this->scroll_window_start +
         min(this->boards_count, this->scroll_window_height);
   }
+
+  this->data_manager = data_manager;
 }
 
 void MainMenu::show() {
@@ -103,12 +105,15 @@ void MainMenu::draw_menu_items() {
 
 void MainMenu::handle_key_press(char key) {
   switch (key) {
-  case 'q':
+  case 'q': {
+    // quit
     endwin();
     exit(0);
 
     break;
-  case 'k':
+  }
+  case 'k': {
+    // move up
     if (--this->highlighted_index == SIZE_MAX) {
       this->scroll_window_start =
           max(this->boards_names.begin(), this->scroll_window_start - 1);
@@ -120,7 +125,9 @@ void MainMenu::handle_key_press(char key) {
     }
 
     break;
-  case 'j':
+  }
+  case 'j': {
+    // move down
     this->highlighted_index =
         min(this->boards_count - 1, this->highlighted_index + 1);
 
@@ -135,15 +142,68 @@ void MainMenu::handle_key_press(char key) {
     }
 
     break;
-  case 'd':
+  }
+  case 'g': {
+    // go to first board
+    if (this->boards_count > 0) {
+      this->scroll_window_start = this->boards_names.begin();
+      this->scroll_window_end =
+          this->scroll_window_start +
+          min(this->boards_count, this->scroll_window_height);
+    }
+    this->highlighted_index = 0;
+
     break;
-  case 'n':
+  }
+  case 'G': {
+    // go to last board
+    this->scroll_window_end = this->boards_names.end();
+    this->scroll_window_start =
+        this->scroll_window_end -
+        min(this->boards_count, this->scroll_window_height);
+
+    this->highlighted_index =
+        min(this->scroll_window_height - 1, this->boards_count - 1);
+
     break;
-  case 'g':
+  }
+  case 'd': {
+    // delete board
+    if (this->boards_count > 0) {
+      string board_to_delete =
+          *(this->scroll_window_start + this->highlighted_index);
+      this->data_manager->delete_board(board_to_delete);
+
+      this->boards_names = data_manager->get_boards_names();
+      this->boards_count = this->boards_names.size();
+
+      if (this->boards_count > 0) {
+        this->scroll_window_start = this->boards_names.begin();
+        this->scroll_window_end =
+            this->scroll_window_start +
+            min(this->boards_count, this->scroll_window_height);
+      }
+
+      this->highlighted_index =
+          min(this->highlighted_index, this->boards_count - 1);
+    }
+
     break;
-  case 'G':
+  }
+  case 'c': {
+    // create board
+
     break;
-  case '\n':
+  }
+  case 'r': {
+    // rename board
+
     break;
+  }
+  case '\n': {
+    // enter board
+
+    break;
+  }
   }
 }

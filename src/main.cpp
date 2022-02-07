@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     init_pair(COLOR_PAIR_BORDER, COLOR_WHITE, -1);
 
     if (config.default_board == "") {
-      MainMenu main_menu(data_manager);
+      MainMenu main_menu(&data_manager);
       main_menu.show();
     }
 
