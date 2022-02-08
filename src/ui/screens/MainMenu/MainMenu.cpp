@@ -209,6 +209,20 @@ void MainMenu::handle_key_press(char key) {
   }
   case 'r': {
     // rename board
+    string old_name = *(this->scroll_window_start + this->highlighted_index);
+    string new_name = this->create_input_window(" Rename Board ", old_name);
+
+    if (new_name.length() > 0) {
+      size_t offset = this->scroll_window_start - this->boards_names.begin();
+
+      this->data_manager->rename_board(old_name, new_name);
+
+      this->boards_names = this->data_manager->get_boards_names();
+      this->scroll_window_start = this->boards_names.begin() + offset;
+      this->scroll_window_end =
+          this->scroll_window_start +
+          min(this->boards_count, this->scroll_window_height);
+    }
 
     break;
   }
@@ -220,7 +234,7 @@ void MainMenu::handle_key_press(char key) {
   }
 }
 
-string MainMenu::create_input_window(string title) {
+string MainMenu::create_input_window(string title, string content) {
   int max_y, max_x;
   getmaxyx(stdscr, max_y, max_x);
 
@@ -241,7 +255,7 @@ string MainMenu::create_input_window(string title) {
   refresh();
   wrefresh(outer_box);
 
-  Input input_bar(start_y, start_x, height, width);
+  Input input_bar(start_y, start_x, height, width, content);
   string input = input_bar.show();
 
   werase(outer_box);

@@ -14,6 +14,7 @@ public:
   void add_board(string name);
   void create_board(string name);
   void delete_board(string name);
+  void rename_board(string old_name, string new_name);
 
   void does_board_exist(string name);
   vector<string> get_boards_names();

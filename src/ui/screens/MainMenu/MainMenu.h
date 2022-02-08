@@ -17,7 +17,7 @@ public:
 private:
   void draw_menu_items();
   void handle_key_press(char key);
-  string create_input_window(string title);
+  string create_input_window(string title, string content = "");
 
   int items_start_y;
   size_t highlighted_index;

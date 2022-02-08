@@ -67,6 +67,22 @@ void DataManager::delete_board(string name) {
   this->write_data_to_file();
 }
 
+void DataManager::rename_board(string old_name, string new_name) {
+  new_name = remove_trim_spaces(new_name);
+
+  if (new_name.length() < 1) {
+    fprintf(stderr, "ERROR: Board name can't be empty\n");
+    exit(1);
+  }
+
+  for (size_t i = 0; i < this->boards.size(); ++i) {
+    if (this->boards[i].name == old_name)
+      this->boards[i].name = new_name;
+  }
+
+  this->write_data_to_file();
+}
+
 vector<string> DataManager::parse_data_if_valid() {
   fstream data_file;
   data_file.open(DATA_FILE, ios::in);
