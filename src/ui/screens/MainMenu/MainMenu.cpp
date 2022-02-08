@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "../../../helpers/consts.h"
 #include "../../components/Footer/Footer.h"
+#include "../../components/Input/Input.h"
 #include "../../helpers/win_center_text/win_center_text.h"
 
 MainMenu::MainMenu(DataManager *data_manager) {
@@ -186,6 +187,23 @@ void MainMenu::handle_key_press(char key) {
   }
   case 'c': {
     // create board
+    string board_name = this->create_input_window(" New Board Name ");
+
+    if (board_name.length() > 0) {
+      this->data_manager->create_board(board_name);
+
+      this->boards_names = data_manager->get_boards_names();
+      this->boards_count = this->boards_names.size();
+
+      // highlight the just created board
+      this->scroll_window_end = this->boards_names.end();
+      this->scroll_window_start =
+          this->scroll_window_end -
+          min(this->boards_count, this->scroll_window_height);
+
+      this->highlighted_index =
+          min(this->scroll_window_height - 1, this->boards_count - 1);
+    }
 
     break;
   }
@@ -200,4 +218,35 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   }
+}
+
+string MainMenu::create_input_window(string title) {
+  int max_y, max_x;
+  getmaxyx(stdscr, max_y, max_x);
+
+  int height = 1;
+  int width = max_x * 0.4;
+
+  int start_y = max_y / 2;
+  int start_x = (max_x / 2) - (width / 2);
+
+  WINDOW *outer_box = newwin(height + 2, width + 2, start_y - 1, start_x - 1);
+
+  wattron(outer_box, COLOR_PAIR(COLOR_PAIR_BORDER));
+  box(outer_box, 0, 0);
+  wattroff(outer_box, COLOR_PAIR(COLOR_PAIR_BORDER));
+
+  mvwprintw(outer_box, 0, 1, "%s", title.c_str());
+
+  refresh();
+  wrefresh(outer_box);
+
+  Input input_bar(start_y, start_x, height, width);
+  string input = input_bar.show();
+
+  werase(outer_box);
+  refresh();
+  wrefresh(outer_box);
+
+  return input;
 }
