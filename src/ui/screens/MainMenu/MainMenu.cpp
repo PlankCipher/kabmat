@@ -181,18 +181,20 @@ void MainMenu::handle_key_press(char key) {
   }
   case 'r': {
     // rename board
-    string old_name =
-        *(this->menu_window.window_start + this->highlighted_index);
-    string new_name = this->create_input_window(" Rename Board ", old_name);
+    if (this->boards_count > 0) {
+      string old_name =
+          *(this->menu_window.window_start + this->highlighted_index);
+      string new_name = this->create_input_window(" Rename Board ", old_name);
 
-    if (new_name.length() > 0) {
-      size_t offset =
-          this->menu_window.window_start - this->boards_names.begin();
+      if (new_name.length() > 0) {
+        size_t offset =
+            this->menu_window.window_start - this->boards_names.begin();
 
-      this->data_manager->rename_board(old_name, new_name);
+        this->data_manager->rename_board(old_name, new_name);
 
-      this->boards_names = this->data_manager->get_boards_names();
-      this->menu_window.scroll_to_offset(offset);
+        this->boards_names = this->data_manager->get_boards_names();
+        this->menu_window.scroll_to_offset(offset);
+      }
     }
 
     break;
