@@ -7,7 +7,7 @@ using namespace std;
 
 class Input {
 public:
-  Input(int start_y, int start_x, int height, int width, string content = "");
+  Input(int height, int width, int start_y, int start_x, string content = "");
 
   string show();
 

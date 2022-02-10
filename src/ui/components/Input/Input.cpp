@@ -3,7 +3,7 @@
 #include "../../../helpers/remove_trim_spaces/remove_trim_spaces.h"
 #include "Input.h"
 
-Input::Input(int start_y, int start_x, int height, int width, string content) {
+Input::Input(int height, int width, int start_y, int start_x, string content) {
   this->content = content;
 
   this->start_y = start_y;

@@ -3,6 +3,7 @@
 #include <ncurses.h>
 
 #include "../../../DataManager/DataManager.h"
+#include "../../components/ScrollableWindow/ScrollableWindow.h"
 
 class MainMenu {
 public:
@@ -10,22 +11,22 @@ public:
 
   void show();
 
-  WINDOW *window;
   int height;
   int width;
+  int start_y;
+  int start_x;
+  WINDOW *window;
 
 private:
-  void draw_menu_items();
+  void draw_menu_items(vector<string> shown_boards, WINDOW *scrollable_window);
+  void highlight_current();
   void handle_key_press(char key);
   string create_input_window(string title, string content = "");
 
-  int items_start_y;
-  size_t highlighted_index;
+  int highlighted_index;
+  DataManager *data_manager;
   vector<string> boards_names;
   size_t boards_count;
-  size_t scroll_window_height;
-  vector<string>::iterator scroll_window_start;
-  vector<string>::iterator scroll_window_end;
-
-  DataManager *data_manager;
+  int menu_window_height;
+  ScrollableWindow<string> menu_window;
 };
