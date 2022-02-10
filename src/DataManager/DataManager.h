@@ -16,7 +16,7 @@ public:
   void delete_board(string name);
   void rename_board(string old_name, string new_name);
 
-  void does_board_exist(string name);
+  Board *get_board_if_exists(string name);
   vector<string> get_boards_names();
 
   vector<Board> boards;

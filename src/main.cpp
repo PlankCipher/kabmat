@@ -6,6 +6,8 @@
 #include "helpers/consts.h"
 #include "ui/screens/MainMenu/MainMenu.h"
 
+#include "ui/screens/Board/Board.h"
+
 int main(int argc, char **argv) {
   DataManager data_manager;
   Config config;
@@ -27,11 +29,15 @@ int main(int argc, char **argv) {
     use_default_colors();
 
     init_pair(COLOR_PAIR_FOOTER, COLOR_BLACK, COLOR_WHITE);
+    init_pair(COLOR_PAIR_HEADER, COLOR_BLACK, COLOR_WHITE);
     init_pair(COLOR_PAIR_BORDER, COLOR_WHITE, -1);
 
     if (config.default_board == "") {
       MainMenu main_menu(&data_manager);
       main_menu.show();
+    } else {
+      BoardScreen board_screen(config.default_board, &data_manager, false);
+      board_screen.show();
     }
 
     endwin();

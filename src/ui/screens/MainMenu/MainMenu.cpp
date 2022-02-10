@@ -5,6 +5,7 @@
 #include "../../components/Help/Help.h"
 #include "../../components/Input/Input.h"
 #include "../../helpers/win_center_text/win_center_text.h"
+#include "../Board/Board.h"
 #include "MainMenu.h"
 
 // I had to
@@ -27,10 +28,7 @@ MainMenu::MainMenu(DataManager *data_manager)
   this->data_manager = data_manager;
 }
 
-void MainMenu::show() {
-  Footer footer(false, true);
-  footer.show();
-
+void MainMenu::setup_window() {
   // border
   wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
   box(this->window, 0, 0);
@@ -44,7 +42,16 @@ void MainMenu::show() {
   refresh();
   wrefresh(this->window);
 
+  this->menu_window.draw();
+}
+
+void MainMenu::show() {
+  Footer footer(false, true);
+  footer.show();
+
   this->menu_window.scroll_to_top();
+
+  this->setup_window();
 
   char key;
   while ((key = wgetch(this->window))) {
@@ -107,23 +114,7 @@ void MainMenu::handle_key_press(char key) {
     Help help_window;
     help_window.show();
 
-    // restoring previous look of menu
-    // after closing help window
-
-    // border
-    wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
-    box(this->window, 0, 0);
-    wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
-
-    // menu title
-    string menu_title = " Boards ";
-    int center_x = win_center_x(this->window, &menu_title);
-    mvwprintw(this->window, 0, center_x, "%s", menu_title.c_str());
-
-    refresh();
-    wrefresh(this->window);
-
-    this->menu_window.draw();
+    this->setup_window();
 
     break;
   }
@@ -226,7 +217,24 @@ void MainMenu::handle_key_press(char key) {
   }
   case '\n': {
     // enter board
+    if (this->boards_count > 0) {
+      string board_to_open =
+          *(this->menu_window.window_start + this->highlighted_index);
 
+      BoardScreen board_screen(board_to_open, this->data_manager, true);
+      board_screen.show();
+
+      // restoring previous look of menu window
+      werase(this->window);
+      wrefresh(this->window);
+      erase();
+      refresh();
+
+      Footer footer(false, true);
+      footer.show();
+
+      this->setup_window();
+    }
     break;
   }
   }
@@ -245,23 +253,7 @@ string MainMenu::create_input_window(string title, string content) {
   Input input_bar(height, width, start_y, start_x, content, title);
   string input = input_bar.show();
 
-  // restoring previous look of menu
-  // after erasing the input window
-
-  // border
-  wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
-  box(this->window, 0, 0);
-  wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
-
-  // menu title
-  string menu_title = " Boards ";
-  int center_x = win_center_x(this->window, &menu_title);
-  mvwprintw(this->window, 0, center_x, "%s", menu_title.c_str());
-
-  refresh();
-  wrefresh(this->window);
-
-  this->menu_window.draw();
+  this->setup_window();
 
   return input;
 }

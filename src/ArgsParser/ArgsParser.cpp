@@ -62,7 +62,7 @@ void ArgsParser::parse_argument(string argument, string value,
     for (size_t i = 0; i < boards_names.size(); ++i)
       cout << boards_names[i] << endl;
   } else if (argument.compare("-o") == 0 || argument.compare("--open") == 0) {
-    data_manager->does_board_exist(value);
+    data_manager->get_board_if_exists(value);
     config->default_board = value;
   } else if (argument.compare("-d") == 0 || argument.compare("--delete") == 0) {
     data_manager->delete_board(value);

@@ -55,7 +55,7 @@ void DataManager::create_board(string name) {
 }
 
 void DataManager::delete_board(string name) {
-  this->does_board_exist(name);
+  this->get_board_if_exists(name);
 
   vector<Board> *boards = &this->boards;
 
@@ -163,10 +163,10 @@ void DataManager::write_data_to_file() {
   }
 }
 
-void DataManager::does_board_exist(string name) {
+Board *DataManager::get_board_if_exists(string name) {
   for (size_t i = 0; i < this->boards.size(); ++i) {
     if (this->boards[i].name == name) {
-      return;
+      return &this->boards[i];
     }
   }
 
