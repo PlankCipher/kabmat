@@ -7,11 +7,13 @@ using namespace std;
 
 class Input {
 public:
-  Input(int height, int width, int start_y, int start_x, string content = "");
+  Input(int height, int width, int start_y, int start_x, string content = "",
+        string title = "");
 
   string show();
 
   string content;
+  string title;
 
 private:
   bool handle_key_press(char key);

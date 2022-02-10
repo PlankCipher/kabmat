@@ -1,10 +1,11 @@
-#include <curses.h>
-
-#include "../../../helpers/remove_trim_spaces/remove_trim_spaces.h"
 #include "Input.h"
+#include "../../../helpers/consts.h"
+#include "../../../helpers/remove_trim_spaces/remove_trim_spaces.h"
 
-Input::Input(int height, int width, int start_y, int start_x, string content) {
+Input::Input(int height, int width, int start_y, int start_x, string content,
+             string title) {
   this->content = content;
+  this->title = title;
 
   this->start_y = start_y;
   this->start_x = start_x;
@@ -19,7 +20,12 @@ Input::Input(int height, int width, int start_y, int start_x, string content) {
 }
 
 string Input::show() {
-  mvwprintw(this->window, 0, 0, "%s", this->content.c_str());
+  wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+  box(this->window, 0, 0);
+  wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+
+  mvwprintw(this->window, 0, 1, "%s", this->title.c_str());
+  mvwprintw(this->window, 1, 1, "%s", this->content.c_str());
 
   refresh();
   wrefresh(this->window);
@@ -29,11 +35,17 @@ string Input::show() {
   while (!done && (key = wgetch(this->window))) {
     werase(this->window);
 
+    wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+    box(this->window, 0, 0);
+    wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+
+    mvwprintw(this->window, 0, 1, "%s", this->title.c_str());
+
     done = this->handle_key_press(key);
 
     string shown_content =
         this->content.substr(this->left_end, this->right_end);
-    mvwprintw(this->window, 0, 0, "%s", shown_content.c_str());
+    mvwprintw(this->window, 1, 1, "%s", shown_content.c_str());
 
     refresh();
     wrefresh(this->window);
@@ -81,5 +93,5 @@ bool Input::handle_key_press(char key) {
 void Input::update_ends() {
   this->right_end = this->content.length();
   this->left_end =
-      this->right_end - min((size_t)this->width, this->content.length());
+      this->right_end - min((size_t)this->width - 3, this->content.length());
 }

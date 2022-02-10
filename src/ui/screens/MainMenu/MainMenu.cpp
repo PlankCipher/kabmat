@@ -236,28 +236,14 @@ string MainMenu::create_input_window(string title, string content) {
   int max_y, max_x;
   getmaxyx(stdscr, max_y, max_x);
 
-  int height = 1;
+  int height = 3;
   int width = max_x * 0.4;
 
-  int start_y = max_y / 2;
+  int start_y = (max_y / 2) - (height / 2);
   int start_x = (max_x / 2) - (width / 2);
 
-  WINDOW *outer_box = newwin(height + 2, width + 2, start_y - 1, start_x - 1);
-
-  wattron(outer_box, COLOR_PAIR(COLOR_PAIR_BORDER));
-  box(outer_box, 0, 0);
-  wattroff(outer_box, COLOR_PAIR(COLOR_PAIR_BORDER));
-
-  mvwprintw(outer_box, 0, 1, "%s", title.c_str());
-
-  refresh();
-  wrefresh(outer_box);
-
-  Input input_bar(height, width, start_y, start_x, content);
+  Input input_bar(height, width, start_y, start_x, content, title);
   string input = input_bar.show();
-
-  werase(outer_box);
-  wrefresh(outer_box);
 
   // restoring previous look of menu
   // after erasing the input window
