@@ -2,6 +2,7 @@
 
 #include "../../../helpers/consts.h"
 #include "../../components/Footer/Footer.h"
+#include "../../components/Help/Help.h"
 #include "../../components/Input/Input.h"
 #include "../../helpers/win_center_text/win_center_text.h"
 #include "MainMenu.h"
@@ -27,7 +28,7 @@ MainMenu::MainMenu(DataManager *data_manager)
 }
 
 void MainMenu::show() {
-  Footer footer(false, false);
+  Footer footer(false, true);
   footer.show();
 
   // border
@@ -99,6 +100,30 @@ void MainMenu::handle_key_press(char key) {
     // quit
     endwin();
     exit(0);
+
+    break;
+  }
+  case 'h': {
+    Help help_window;
+    help_window.show();
+
+    // restoring previous look of menu
+    // after closing help window
+
+    // border
+    wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+    box(this->window, 0, 0);
+    wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+
+    // menu title
+    string menu_title = " Boards ";
+    int center_x = win_center_x(this->window, &menu_title);
+    mvwprintw(this->window, 0, center_x, "%s", menu_title.c_str());
+
+    refresh();
+    wrefresh(this->window);
+
+    this->menu_window.draw();
 
     break;
   }
@@ -236,6 +261,7 @@ string MainMenu::create_input_window(string title, string content) {
 
   // restoring previous look of menu
   // after erasing the input window
+
   // border
   wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
   box(this->window, 0, 0);

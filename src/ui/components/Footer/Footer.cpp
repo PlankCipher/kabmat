@@ -27,7 +27,7 @@ void Footer::show() {
 
   // help hint
   if (this->show_help_hint)
-    mvprintw(y_max - 1, x_max - 11, "? for help");
+    mvprintw(y_max - 1, x_max - 11, "h for help");
 
   mvchgat(y_max - 1, 0, x_max, A_NORMAL, COLOR_PAIR_FOOTER, NULL);
 }
