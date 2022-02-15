@@ -8,7 +8,6 @@
 #include "../Board/Board.h"
 #include "MainMenu.h"
 
-// I had to
 MainMenu::MainMenu(DataManager *data_manager)
     : height{(int)(getmaxy(stdscr) * 0.3)}, width{(int)(getmaxx(stdscr) * 0.2)},
       start_y{(getmaxy(stdscr) / 2) - (this->height / 2)},

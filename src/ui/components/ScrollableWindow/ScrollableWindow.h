@@ -14,7 +14,8 @@ template <typename T> class ScrollableWindow {
 public:
   ScrollableWindow(int height, int width, int start_y, int start_x,
                    vector<T> *items, size_t *items_count,
-                   function<void(vector<T>, WINDOW *)> draw_callback) {
+                   function<void(vector<T>, WINDOW *)> draw_callback,
+                   int max_items_in_win = 0) {
     this->height = height;
     this->width = width;
     this->start_y = start_y;
@@ -23,6 +24,8 @@ public:
 
     this->items = items;
     this->items_count = items_count;
+    this->max_items_in_win =
+        max_items_in_win == 0 ? this->height : max_items_in_win;
 
     this->window =
         newwin(this->height, this->width, this->start_y, this->start_x);
@@ -41,15 +44,15 @@ public:
 
   void scroll_up() {
     this->window_start = max(this->items->begin(), this->window_start - 1);
-    this->window_end =
-        this->window_start + min(*this->items_count, (size_t)this->height);
+    this->window_end = this->window_start +
+                       min(*this->items_count, (size_t)this->max_items_in_win);
     this->draw();
   }
 
   void scroll_down() {
     this->window_end = min(this->items->end(), this->window_end + 1);
-    this->window_start =
-        this->window_end - min(*this->items_count, (size_t)this->height);
+    this->window_start = this->window_end - min(*this->items_count,
+                                                (size_t)this->max_items_in_win);
     this->draw();
   }
 
@@ -57,22 +60,23 @@ public:
     if (*this->items_count > 0) {
       this->window_start = this->items->begin();
       this->window_end =
-          this->window_start + min(*this->items_count, (size_t)this->height);
+          this->window_start +
+          min(*this->items_count, (size_t)this->max_items_in_win);
     }
     this->draw();
   }
 
   void scroll_to_bottom() {
     this->window_end = this->items->end();
-    this->window_start =
-        this->window_end - min(*this->items_count, (size_t)this->height);
+    this->window_start = this->window_end - min(*this->items_count,
+                                                (size_t)this->max_items_in_win);
     this->draw();
   }
 
   void scroll_to_offset(size_t offset) {
     this->window_start = this->items->begin() + offset;
-    this->window_end =
-        this->window_start + min(*this->items_count, (size_t)this->height);
+    this->window_end = this->window_start +
+                       min(*this->items_count, (size_t)this->max_items_in_win);
     this->draw();
   }
 
@@ -85,6 +89,7 @@ public:
 
   vector<T> *items;
   size_t *items_count;
+  int max_items_in_win;
 
   typename vector<T>::iterator window_start;
   typename vector<T>::iterator window_end;
