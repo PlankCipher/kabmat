@@ -1,11 +1,6 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "Board.h"
-
-using namespace std;
 
 class DataManager {
 public:
@@ -13,8 +8,8 @@ public:
 
   void add_board(string name);
   void create_board(string name);
-  void delete_board(string name);
   void rename_board(string old_name, string new_name);
+  void delete_board(string name);
 
   Board *get_board_if_exists(string name);
   vector<string> get_boards_names();

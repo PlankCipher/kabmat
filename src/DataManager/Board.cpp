@@ -1,6 +1,5 @@
 #include "Board.h"
 #include "../helpers/remove_trim_spaces/remove_trim_spaces.h"
-#include "Column.h"
 
 Board::Board(string name) {
   this->name = name;

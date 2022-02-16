@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ncurses.h>
-
 #include "../../../DataManager/DataManager.h"
 #include "../../components/ScrollableWindow/ScrollableWindow.h"
 
@@ -24,10 +22,9 @@ private:
   void handle_key_press(char key);
   string create_input_window(string title, string content = "");
 
-  int highlighted_index;
   DataManager *data_manager;
   vector<string> boards_names;
   size_t boards_count;
-  int menu_window_height;
   ScrollableWindow<string> menu_window;
+  int highlighted_index;
 };

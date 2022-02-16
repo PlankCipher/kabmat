@@ -4,15 +4,15 @@
 
 Input::Input(int height, int width, int start_y, int start_x, string content,
              string title) {
-  this->content = content;
-  this->title = title;
-
   this->start_y = start_y;
   this->start_x = start_x;
   this->height = height;
   this->width = width;
   this->window =
       newwin(this->height, this->width, this->start_y, this->start_x);
+
+  this->content = content;
+  this->title = title;
 
   this->update_ends();
 
@@ -47,13 +47,11 @@ string Input::show() {
         this->content.substr(this->left_end, this->right_end);
     mvwprintw(this->window, 1, 1, "%s", shown_content.c_str());
 
-    refresh();
     wrefresh(this->window);
   }
 
   curs_set(0);
   werase(this->window);
-  refresh();
   wrefresh(this->window);
 
   return remove_trim_spaces(this->content);

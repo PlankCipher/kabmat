@@ -30,4 +30,6 @@ void Footer::show() {
     mvprintw(y_max - 1, x_max - 11, "h for help");
 
   mvchgat(y_max - 1, 0, x_max, A_NORMAL, COLOR_PAIR_FOOTER, NULL);
+
+  refresh();
 }

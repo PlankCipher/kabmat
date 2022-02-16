@@ -2,10 +2,9 @@
 
 string remove_trim_spaces(string str) {
   // replace any whitespace with a space character
-  for (size_t i = 0; i < str.length(); ++i) {
+  for (size_t i = 0; i < str.length(); ++i)
     if (isspace(str[i]))
       str[i] = ' ';
-  }
 
   size_t first_non_space = str.find_first_not_of(' ');
 

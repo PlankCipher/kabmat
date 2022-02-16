@@ -10,5 +10,6 @@ public:
 
   void show();
 
+private:
   string board_name;
 };

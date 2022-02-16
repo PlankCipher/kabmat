@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "Column.h"
 
 using namespace std;

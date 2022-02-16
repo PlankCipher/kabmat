@@ -1,12 +1,7 @@
-#include <ncurses.h>
-
 #include "ArgsParser/ArgsParser.h"
-#include "Config/Config.h"
-#include "DataManager/DataManager.h"
 #include "helpers/consts.h"
-#include "ui/screens/MainMenu/MainMenu.h"
-
 #include "ui/screens/Board/Board.h"
+#include "ui/screens/MainMenu/MainMenu.h"
 
 int main(int argc, char **argv) {
   DataManager data_manager;

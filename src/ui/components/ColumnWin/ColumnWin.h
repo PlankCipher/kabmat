@@ -12,10 +12,11 @@ public:
   void focus();
   void unfocus();
 
-  WINDOW *window;
   int height;
   int width;
   int start_y;
+  WINDOW *window;
 
+private:
   Column *column;
 };

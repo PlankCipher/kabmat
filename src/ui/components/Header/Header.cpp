@@ -13,4 +13,6 @@ void Header::show() {
   mvprintw(0, center_x, "%s", this->board_name.c_str());
 
   mvchgat(0, 0, max_x, A_NORMAL, COLOR_PAIR_HEADER, NULL);
+
+  refresh();
 }

@@ -1,30 +1,28 @@
-#include <functional>
-
+#include "MainMenu.h"
 #include "../../../helpers/consts.h"
 #include "../../components/Footer/Footer.h"
 #include "../../components/Help/Help.h"
 #include "../../components/Input/Input.h"
 #include "../../helpers/win_center_text/win_center_text.h"
 #include "../Board/Board.h"
-#include "MainMenu.h"
 
 MainMenu::MainMenu(DataManager *data_manager)
     : height{(int)(getmaxy(stdscr) * 0.3)}, width{(int)(getmaxx(stdscr) * 0.2)},
       start_y{(getmaxy(stdscr) / 2) - (this->height / 2)},
       start_x{(getmaxx(stdscr) / 2) - (this->width / 2)},
-      boards_names{data_manager->get_boards_names()},
-      boards_count{this->boards_names.size()}, menu_window_height{this->height -
-                                                                  3},
       menu_window{ScrollableWindow<string>(
-          this->menu_window_height, this->width - 2, this->start_y + 2,
+          this->height - 3, this->width - 2, this->start_y + 2,
           this->start_x + 1, &this->boards_names, &this->boards_count,
           bind(&MainMenu::draw_menu_items, this, placeholders::_1,
                placeholders::_2))} {
   this->window =
       newwin(this->height, this->width, this->start_y, this->start_x);
+  refresh();
 
-  this->highlighted_index = 0;
   this->data_manager = data_manager;
+  this->boards_names = this->data_manager->get_boards_names();
+  this->boards_count = this->boards_names.size();
+  this->highlighted_index = 0;
 }
 
 void MainMenu::setup_window() {
@@ -38,7 +36,6 @@ void MainMenu::setup_window() {
   int center_x = win_center_x(this->window, &menu_title);
   mvwprintw(this->window, 0, center_x, "%s", menu_title.c_str());
 
-  refresh();
   wrefresh(this->window);
 
   this->menu_window.draw();
@@ -53,9 +50,8 @@ void MainMenu::show() {
   this->setup_window();
 
   char key;
-  while ((key = wgetch(this->window))) {
+  while ((key = wgetch(this->window)))
     this->handle_key_press(key);
-  }
 }
 
 void MainMenu::draw_menu_items(vector<string> shown_boards,
@@ -77,7 +73,6 @@ void MainMenu::draw_menu_items(vector<string> shown_boards,
     mvwprintw(scrollable_window, 0, center_x, "%s", create_board_hint.c_str());
   }
 
-  refresh();
   wrefresh(this->window);
   wrefresh(scrollable_window);
 }
@@ -85,7 +80,7 @@ void MainMenu::draw_menu_items(vector<string> shown_boards,
 void MainMenu::highlight_current() {
   if (this->boards_count > 0) {
     // clear previous highlights
-    for (int i = 0; i < this->menu_window_height; ++i)
+    for (int i = 0; i < this->menu_window.max_items_in_win; ++i)
       mvwchgat(this->menu_window.window, i, 0,
                getmaxx(this->menu_window.window), A_NORMAL, 0, NULL);
 
@@ -94,7 +89,6 @@ void MainMenu::highlight_current() {
              getmaxx(this->menu_window.window), A_NORMAL, COLOR_PAIR_FOOTER,
              NULL);
 
-    refresh();
     wrefresh(this->window);
     wrefresh(this->menu_window.window);
   }
@@ -120,10 +114,10 @@ void MainMenu::handle_key_press(char key) {
   case 'k': {
     // move up
     if (--this->highlighted_index == -1) {
-      this->menu_window.scroll_up();
       this->highlighted_index = 0;
-    }
-    this->highlight_current();
+      this->menu_window.scroll_up();
+    } else
+      this->highlight_current();
 
     break;
   }
@@ -132,28 +126,26 @@ void MainMenu::handle_key_press(char key) {
     this->highlighted_index =
         min(this->boards_count - 1, (size_t)this->highlighted_index + 1);
 
-    if (this->highlighted_index == this->menu_window_height) {
+    if (this->highlighted_index == this->menu_window.max_items_in_win) {
+      this->highlighted_index = this->menu_window.max_items_in_win - 1;
       this->menu_window.scroll_down();
-      this->highlighted_index = this->menu_window_height - 1;
-    }
-    this->highlight_current();
+    } else
+      this->highlight_current();
 
     break;
   }
   case 'g': {
     // go to first board
-    this->menu_window.scroll_to_top();
     this->highlighted_index = 0;
-    this->highlight_current();
+    this->menu_window.scroll_to_top();
 
     break;
   }
   case 'G': {
     // go to last board
+    this->highlighted_index = min(
+        (size_t)this->menu_window.max_items_in_win - 1, this->boards_count - 1);
     this->menu_window.scroll_to_bottom();
-    this->highlighted_index =
-        min((size_t)this->menu_window_height - 1, this->boards_count - 1);
-    this->highlight_current();
 
     break;
   }
@@ -167,10 +159,9 @@ void MainMenu::handle_key_press(char key) {
       this->boards_names = data_manager->get_boards_names();
       this->boards_count = this->boards_names.size();
 
-      this->menu_window.scroll_to_top();
       this->highlighted_index =
           min((size_t)this->highlighted_index, this->boards_count - 1);
-      this->highlight_current();
+      this->menu_window.scroll_to_top();
     }
 
     break;
@@ -186,10 +177,10 @@ void MainMenu::handle_key_press(char key) {
       this->boards_count = this->boards_names.size();
 
       // highlight the just created board
-      this->menu_window.scroll_to_bottom();
       this->highlighted_index =
-          min((size_t)this->menu_window_height - 1, this->boards_count - 1);
-      this->highlight_current();
+          min((size_t)this->menu_window.max_items_in_win - 1,
+              this->boards_count - 1);
+      this->menu_window.scroll_to_bottom();
     }
 
     break;
@@ -224,8 +215,6 @@ void MainMenu::handle_key_press(char key) {
       board_screen.show();
 
       // restoring previous look of menu window
-      werase(this->window);
-      wrefresh(this->window);
       erase();
       refresh();
 

@@ -1,8 +1,7 @@
-#include <functional>
-
+#include "Board.h"
 #include "../../components/Footer/Footer.h"
 #include "../../components/Header/Header.h"
-#include "Board.h"
+#include "../../helpers/win_center_text/win_center_text.h"
 
 BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
                          bool from_tui)
@@ -13,10 +12,9 @@ BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
                       bind(&BoardScreen::draw_columns, this, placeholders::_1,
                            placeholders::_2),
                       3)} {
-  this->from_tui = from_tui;
-
   this->window =
       newwin(this->height, this->width, this->start_y, this->start_x);
+  refresh();
 
   this->data_manager = data_manager;
   this->board = this->data_manager->get_board_if_exists(board_name);
@@ -28,6 +26,8 @@ BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
   }
   this->columns_count = this->columns.size();
   this->focused_index = 0;
+
+  this->from_tui = from_tui;
 }
 
 void BoardScreen::show() {
@@ -37,21 +37,21 @@ void BoardScreen::show() {
   Footer footer(false, true);
   footer.show();
 
-  refresh();
-  wrefresh(this->window);
-
   this->columns_window.scroll_to_top();
 
   char key;
   bool done = false;
-  while (!done && (key = wgetch(this->window))) {
+  while (!done && (key = wgetch(this->window)))
     done = this->handle_key_press(key);
-  }
 }
 
 void BoardScreen::draw_columns(vector<ColumnWin> shown_columns,
                                WINDOW *scrollable_window) {
+  wrefresh(this->window);
+
   if (shown_columns.size() > 0) {
+    wrefresh(scrollable_window);
+
     for (size_t i = 0; i < shown_columns.size(); ++i) {
       int start_x = (i * (shown_columns[i].width + 2)) + this->start_x;
       shown_columns[i].show(start_x);
@@ -62,6 +62,7 @@ void BoardScreen::draw_columns(vector<ColumnWin> shown_columns,
     string create_column_hint = "C to create a new column";
     int center_x = win_center_x(scrollable_window, &create_column_hint);
     mvwprintw(scrollable_window, 0, center_x, "%s", create_column_hint.c_str());
+
     wrefresh(scrollable_window);
   }
 }

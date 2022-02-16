@@ -1,8 +1,6 @@
-#include <functional>
-
+#include "Help.h"
 #include "../../../helpers/consts.h"
 #include "../ScrollableWindow/ScrollableWindow.h"
-#include "Help.h"
 
 Help::Help() {
   int max_y, max_x;
@@ -81,10 +79,7 @@ void Help::show() {
     }
   }
 
-  werase(help_window.window);
   werase(this->window);
-  refresh();
-  wrefresh(help_window.window);
   wrefresh(this->window);
 }
 
@@ -93,7 +88,6 @@ void Help::draw_help_message(vector<string> shown_message_lines,
   for (size_t i = 0; i < shown_message_lines.size(); ++i)
     mvwprintw(scrollable_window, i, 0, "%s", shown_message_lines[i].c_str());
 
-  refresh();
   wrefresh(this->window);
   wrefresh(scrollable_window);
 }

@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <vector>
 
 #include "../helpers/consts.h"
 #include "ArgsParser.h"

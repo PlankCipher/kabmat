@@ -1,9 +1,7 @@
 #include <fstream>
-#include <iostream>
 
 #include "../helpers/consts.h"
 #include "../helpers/remove_trim_spaces/remove_trim_spaces.h"
-#include "Board.h"
 #include "DataManager.h"
 
 DataManager::DataManager() {
@@ -75,10 +73,7 @@ void DataManager::rename_board(string old_name, string new_name) {
     exit(1);
   }
 
-  for (size_t i = 0; i < this->boards.size(); ++i) {
-    if (this->boards[i].name == old_name)
-      this->boards[i].name = new_name;
-  }
+  (*this->get_board_if_exists(old_name)).name = new_name;
 
   this->write_data_to_file();
 }
@@ -164,11 +159,9 @@ void DataManager::write_data_to_file() {
 }
 
 Board *DataManager::get_board_if_exists(string name) {
-  for (size_t i = 0; i < this->boards.size(); ++i) {
-    if (this->boards[i].name == name) {
+  for (size_t i = 0; i < this->boards.size(); ++i)
+    if (this->boards[i].name == name)
       return &this->boards[i];
-    }
-  }
 
   fprintf(stderr, "ERROR: No board named \"%s\" was found\n", name.c_str());
   exit(1);
@@ -178,5 +171,6 @@ vector<string> DataManager::get_boards_names() {
   vector<string> boards_names;
   for (size_t i = 0; i < this->boards.size(); ++i)
     boards_names.push_back(this->boards[i].name);
+
   return boards_names;
 }
