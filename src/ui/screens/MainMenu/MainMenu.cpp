@@ -103,7 +103,7 @@ void MainMenu::handle_key_press(char key) {
 
     break;
   }
-  case 'h': {
+  case '?': {
     Help help_window;
     help_window.show();
 

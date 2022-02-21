@@ -34,7 +34,7 @@ void Help::show() {
       "",
       "Main Menu keybindings:",
       "q       quit",
-      "h       show this help window",
+      "?       show this help window",
       "k       highlight the above board name",
       "j       highlight the below board name",
       "g       highlight the first board name",
