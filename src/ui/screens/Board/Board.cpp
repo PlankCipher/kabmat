@@ -98,60 +98,76 @@ bool BoardScreen::handle_key_press(char key) {
   }
   case 'h': {
     // focus left column
-    if (--this->focused_index == -1) {
-      this->focused_index = 0;
-      this->columns_window.scroll_up();
-    } else
-      this->focus_current();
+    if (this->columns_count > 0) {
+      if (--this->focused_index == -1) {
+        this->focused_index = 0;
+        this->columns_window.scroll_up();
+      } else
+        this->focus_current();
+    }
 
     break;
   }
   case 'l': {
     // focus right column
-    this->focused_index =
-        min(this->columns_count - 1, (size_t)this->focused_index + 1);
+    if (this->columns_count > 0) {
+      this->focused_index =
+          min(this->columns_count - 1, (size_t)this->focused_index + 1);
 
-    if (this->focused_index == this->columns_window.max_items_in_win) {
-      this->focused_index = this->columns_window.max_items_in_win - 1;
-      this->columns_window.scroll_down();
-    } else
-      this->focus_current();
+      if (this->focused_index == this->columns_window.max_items_in_win) {
+        this->focused_index = this->columns_window.max_items_in_win - 1;
+        this->columns_window.scroll_down();
+      } else
+        this->focus_current();
+    }
 
     break;
   }
   case 'k': {
     // focus above card
-    vector<ColumnWin> shown_columns = this->columns_window.get_current_window();
-    shown_columns[this->focused_index].focus_prev();
-    *(this->columns_window.window_start + this->focused_index) =
-        shown_columns[this->focused_index];
+    if (this->columns_count > 0) {
+      vector<ColumnWin> shown_columns =
+          this->columns_window.get_current_window();
+      shown_columns[this->focused_index].focus_prev();
+      *(this->columns_window.window_start + this->focused_index) =
+          shown_columns[this->focused_index];
+    }
 
     break;
   }
   case 'j': {
     // focus below card
-    vector<ColumnWin> shown_columns = this->columns_window.get_current_window();
-    shown_columns[this->focused_index].focus_next();
-    *(this->columns_window.window_start + this->focused_index) =
-        shown_columns[this->focused_index];
+    if (this->columns_count > 0) {
+      vector<ColumnWin> shown_columns =
+          this->columns_window.get_current_window();
+      shown_columns[this->focused_index].focus_next();
+      *(this->columns_window.window_start + this->focused_index) =
+          shown_columns[this->focused_index];
+    }
 
     break;
   }
   case 'g': {
     // focus first card
-    vector<ColumnWin> shown_columns = this->columns_window.get_current_window();
-    shown_columns[this->focused_index].focus_first();
-    *(this->columns_window.window_start + this->focused_index) =
-        shown_columns[this->focused_index];
+    if (this->columns_count > 0) {
+      vector<ColumnWin> shown_columns =
+          this->columns_window.get_current_window();
+      shown_columns[this->focused_index].focus_first();
+      *(this->columns_window.window_start + this->focused_index) =
+          shown_columns[this->focused_index];
+    }
 
     break;
   }
   case 'G': {
     // focus last card
-    vector<ColumnWin> shown_columns = this->columns_window.get_current_window();
-    shown_columns[this->focused_index].focus_last();
-    *(this->columns_window.window_start + this->focused_index) =
-        shown_columns[this->focused_index];
+    if (this->columns_count > 0) {
+      vector<ColumnWin> shown_columns =
+          this->columns_window.get_current_window();
+      shown_columns[this->focused_index].focus_last();
+      *(this->columns_window.window_start + this->focused_index) =
+          shown_columns[this->focused_index];
+    }
 
     break;
   }

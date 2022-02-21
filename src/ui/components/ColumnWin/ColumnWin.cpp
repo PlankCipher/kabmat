@@ -122,44 +122,52 @@ void ColumnWin::setup_cards_window() {
 }
 
 void ColumnWin::focus_prev() {
-  this->setup_cards_window();
-  if (--this->focused_index == -1) {
-    this->focused_index = 0;
-    this->cards_window_offset = max(0, (int)this->cards_window_offset - 1);
-    this->cards_window.scroll_up();
+  if (this->cards_count > 0) {
+    this->setup_cards_window();
+    if (--this->focused_index == -1) {
+      this->focused_index = 0;
+      this->cards_window_offset = max(0, (int)this->cards_window_offset - 1);
+      this->cards_window.scroll_up();
+    }
+    this->focus_current();
   }
-  this->focus_current();
 }
 
 void ColumnWin::focus_next() {
-  this->setup_cards_window();
-  this->focused_index =
-      min(this->cards_count - 1, (size_t)this->focused_index + 1);
+  if (this->cards_count > 0) {
+    this->setup_cards_window();
+    this->focused_index =
+        min(this->cards_count - 1, (size_t)this->focused_index + 1);
 
-  if (this->focused_index == this->cards_window.max_items_in_win) {
-    this->focused_index = this->cards_window.max_items_in_win - 1;
-    this->cards_window_offset =
-        min(this->cards_count - this->cards_window.max_items_in_win,
-            this->cards_window_offset + 1);
-    this->cards_window.scroll_down();
+    if (this->focused_index == this->cards_window.max_items_in_win) {
+      this->focused_index = this->cards_window.max_items_in_win - 1;
+      this->cards_window_offset =
+          min(this->cards_count - this->cards_window.max_items_in_win,
+              this->cards_window_offset + 1);
+      this->cards_window.scroll_down();
+    }
+    this->focus_current();
   }
-  this->focus_current();
 }
 
 void ColumnWin::focus_first() {
-  this->setup_cards_window();
-  this->focused_index = 0;
-  this->cards_window_offset = 0;
-  this->cards_window.scroll_to_top();
-  this->focus_current();
+  if (this->cards_count > 0) {
+    this->setup_cards_window();
+    this->focused_index = 0;
+    this->cards_window_offset = 0;
+    this->cards_window.scroll_to_top();
+    this->focus_current();
+  }
 }
 
 void ColumnWin::focus_last() {
-  this->setup_cards_window();
-  this->focused_index = min(this->cards_count - 1,
-                            (size_t)this->cards_window.max_items_in_win - 1);
-  this->cards_window_offset =
-      max((int)this->cards_count - this->cards_window.max_items_in_win, 0);
-  this->cards_window.scroll_to_bottom();
-  this->focus_current();
+  if (this->cards_count > 0) {
+    this->setup_cards_window();
+    this->focused_index = min(this->cards_count - 1,
+                              (size_t)this->cards_window.max_items_in_win - 1);
+    this->cards_window_offset =
+        max((int)this->cards_count - this->cards_window.max_items_in_win, 0);
+    this->cards_window.scroll_to_bottom();
+    this->focus_current();
+  }
 }
