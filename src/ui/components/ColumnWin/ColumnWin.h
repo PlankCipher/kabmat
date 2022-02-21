@@ -11,9 +11,14 @@ public:
   ColumnWin(int height, int width, int start_y, Column *column);
 
   void show(int start_x);
+
   void focus();
   void unfocus();
   void focus_current();
+  void focus_prev();
+  void focus_next();
+  void focus_first();
+  void focus_last();
 
   int height;
   int width;
