@@ -37,42 +37,51 @@ public:
       this->draw_callback({}, this->window);
   }
 
-  void scroll_up() {
+  void scroll_up(bool redraw = true) {
     this->window_start = max(this->items->begin(), this->window_start - 1);
     this->window_end = this->window_start +
                        min(*this->items_count, (size_t)this->max_items_in_win);
-    this->draw();
+    if (redraw)
+      this->draw();
   }
 
-  void scroll_down() {
+  void scroll_down(bool redraw = true) {
     this->window_end = min(this->items->end(), this->window_end + 1);
     this->window_start = this->window_end - min(*this->items_count,
                                                 (size_t)this->max_items_in_win);
-    this->draw();
+    if (redraw)
+      this->draw();
   }
 
-  void scroll_to_top() {
+  void scroll_to_top(bool redraw = true) {
     if (*this->items_count > 0) {
       this->window_start = this->items->begin();
       this->window_end =
           this->window_start +
           min(*this->items_count, (size_t)this->max_items_in_win);
     }
-    this->draw();
+    if (redraw)
+      this->draw();
   }
 
-  void scroll_to_bottom() {
+  void scroll_to_bottom(bool redraw = true) {
     this->window_end = this->items->end();
     this->window_start = this->window_end - min(*this->items_count,
                                                 (size_t)this->max_items_in_win);
-    this->draw();
+    if (redraw)
+      this->draw();
   }
 
-  void scroll_to_offset(size_t offset) {
+  void scroll_to_offset(size_t offset, bool redraw = true) {
     this->window_start = this->items->begin() + offset;
     this->window_end = this->window_start +
                        min(*this->items_count, (size_t)this->max_items_in_win);
-    this->draw();
+    if (redraw)
+      this->draw();
+  }
+
+  vector<T> get_current_window() {
+    return vector<T>(this->window_start, this->window_end);
   }
 
   vector<T> *items;

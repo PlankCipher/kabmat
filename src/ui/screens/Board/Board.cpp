@@ -68,8 +68,7 @@ void BoardScreen::draw_columns(vector<ColumnWin> shown_columns,
 }
 
 void BoardScreen::focus_current() {
-  vector<ColumnWin> shown_columns = vector<ColumnWin>(
-      this->columns_window.window_start, this->columns_window.window_end);
+  vector<ColumnWin> shown_columns = this->columns_window.get_current_window();
   for (size_t i = 0; i < shown_columns.size(); ++i)
     shown_columns[i].unfocus();
 
