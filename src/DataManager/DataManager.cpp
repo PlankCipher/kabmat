@@ -78,6 +78,36 @@ void DataManager::rename_board(string old_name, string new_name) {
   this->write_data_to_file();
 }
 
+bool DataManager::move_card_up(Column *column, size_t card_index) {
+  bool moved = column->move_card_up(card_index);
+  this->write_data_to_file();
+  return moved;
+}
+
+bool DataManager::move_card_down(Column *column, size_t card_index) {
+  bool moved = column->move_card_down(card_index);
+  this->write_data_to_file();
+  return moved;
+}
+
+bool DataManager::move_card_to_prev_column(Board *board, size_t card_index,
+                                           size_t src_index, size_t dist_index,
+                                           Config *config) {
+  bool moved = board->move_card_to_prev_column(card_index, src_index,
+                                               dist_index, config);
+  this->write_data_to_file();
+  return moved;
+}
+
+bool DataManager::move_card_to_next_column(Board *board, size_t card_index,
+                                           size_t src_index, size_t dist_index,
+                                           Config *config) {
+  bool moved = board->move_card_to_next_column(card_index, src_index,
+                                               dist_index, config);
+  this->write_data_to_file();
+  return moved;
+}
+
 vector<string> DataManager::parse_data_if_valid() {
   fstream data_file;
   data_file.open(DATA_FILE, ios::in);

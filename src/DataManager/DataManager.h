@@ -11,6 +11,16 @@ public:
   void rename_board(string old_name, string new_name);
   void delete_board(string name);
 
+  bool move_card_up(Column *column, size_t card_index);
+  bool move_card_down(Column *column, size_t card_index);
+
+  bool move_card_to_prev_column(Board *board, size_t card_index,
+                                size_t src_index, size_t dist_index,
+                                Config *config);
+  bool move_card_to_next_column(Board *board, size_t card_index,
+                                size_t src_index, size_t dist_index,
+                                Config *config);
+
   Board *get_board_if_exists(string name);
   vector<string> get_boards_names();
 

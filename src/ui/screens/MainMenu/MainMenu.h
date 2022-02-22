@@ -1,11 +1,12 @@
 #pragma once
 
+#include "../../../Config/Config.h"
 #include "../../../DataManager/DataManager.h"
 #include "../../components/ScrollableWindow/ScrollableWindow.h"
 
 class MainMenu {
 public:
-  MainMenu(DataManager *data_manager);
+  MainMenu(DataManager *data_manager, Config *config);
 
   void show();
 
@@ -23,6 +24,7 @@ private:
   string create_input_window(string title, string content = "");
 
   DataManager *data_manager;
+  Config *config;
   vector<string> boards_names;
   size_t boards_count;
   ScrollableWindow<string> menu_window;

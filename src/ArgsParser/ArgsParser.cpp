@@ -11,17 +11,19 @@ ArgsParser::ArgsParser(int argc, char **argv, DataManager *data_manager,
       string argument = argv[i];
       string value = "";
 
-      vector<string> all_args = {
-          "-h", "--help", "-v", "--version", "-l", "--list", "-c", "--create",
-          "-o", "--open", "-d", "--delete",  "-t", "--text"};
+      vector<string> all_args = {"-h", "--help", "-v", "--version",
+                                 "-l", "--list", "-c", "--create",
+                                 "-o", "--open", "-d", "--delete",
+                                 "-t", "--text", "-b", "--card-at-bottom"};
 
       if (find(all_args.begin(), all_args.end(), argument) == all_args.end()) {
         fprintf(stderr, "ERROR: Unknown option `%s`\n", argument.c_str());
         exit(1);
       }
 
-      vector<string> no_value_args = {"-h", "--help", "-v", "--version",
-                                      "-l", "--list", "-t", "--text"};
+      vector<string> no_value_args = {
+          "-h",     "--help", "-v",     "--version", "-l",
+          "--list", "-t",     "--text", "-b",        "--card-at-bottom"};
 
       if (find(no_value_args.begin(), no_value_args.end(), argument) ==
           no_value_args.end()) {
@@ -67,6 +69,9 @@ void ArgsParser::parse_argument(string argument, string value,
     data_manager->delete_board(value);
   } else if (argument.compare("-t") == 0 || argument.compare("--text") == 0) {
     config->tui_enabled = false;
+  } else if (argument.compare("-b") == 0 ||
+             argument.compare("--card-at-bottom") == 0) {
+    config->move_card_to_column_bottom = true;
   }
 }
 
@@ -79,15 +84,18 @@ void ArgsParser::usage() {
   cout << "Usage: kabmat [OPTION]..." << endl << endl;
 
   cout << "Options: " << endl;
-  cout << "  -h, --help             print this help message" << endl;
-  cout << "  -v, --version          print program version" << endl << endl;
+  cout << "  -h, --help              print this help message" << endl;
+  cout << "  -v, --version           print program version" << endl << endl;
 
-  cout << "  -l, --list             list all boards" << endl;
-  cout << "  -c, --create <name>    create a new board with the name <name>"
+  cout << "  -l, --list              list all boards" << endl;
+  cout << "  -c, --create <name>     create a new board with the name <name>"
        << endl;
-  cout << "  -o, --open <name>      open board with name <name>" << endl;
-  cout << "  -d, --delete <name>    delete board with name <name>" << endl
+  cout << "  -o, --open <name>       open board with name <name>" << endl;
+  cout << "  -d, --delete <name>     delete board with name <name>" << endl
        << endl;
 
-  cout << "  -t, --text             disable tui" << endl;
+  cout << "  -t, --text              disable tui" << endl;
+  cout << "  -b, --card-at-bottom    when moving cards between columns, put "
+          "them at the bottom"
+       << endl;
 }

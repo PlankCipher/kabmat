@@ -17,12 +17,17 @@ ColumnWin::ColumnWin(int height, int width, int start_y, Column *column)
   refresh();
 
   this->column = column;
-  for (size_t i = 0; i < this->column->cards.size(); ++i)
-    this->cards.push_back(CardWin(3, this->width - 2, &this->column->cards[i]));
-  this->cards_count = this->cards.size();
+  this->update_cards();
 
   this->focused_index = 0;
   this->cards_window_offset = 0;
+}
+
+void ColumnWin::update_cards() {
+  this->cards = {};
+  for (size_t i = 0; i < this->column->cards.size(); ++i)
+    this->cards.push_back(CardWin(3, this->width - 2, &this->column->cards[i]));
+  this->cards_count = this->cards.size();
 }
 
 void ColumnWin::show(int start_x) {
@@ -170,4 +175,42 @@ void ColumnWin::focus_last() {
     this->cards_window.scroll_to_bottom();
     this->focus_current();
   }
+}
+
+void ColumnWin::move_focused_card_up(DataManager *data_manager) {
+  if (this->cards_count > 0) {
+    this->setup_cards_window();
+
+    size_t focused_card_index = this->get_absolute_focused_index();
+    bool moved = data_manager->move_card_up(this->column, focused_card_index);
+
+    if (moved) {
+      this->update_cards();
+
+      this->cards_window.scroll_to_offset(this->cards_window_offset);
+
+      this->focus_prev();
+    }
+  }
+}
+
+void ColumnWin::move_focused_card_down(DataManager *data_manager) {
+  if (this->cards_count > 0) {
+    this->setup_cards_window();
+
+    size_t focused_card_index = this->get_absolute_focused_index();
+    bool moved = data_manager->move_card_down(this->column, focused_card_index);
+
+    if (moved) {
+      this->update_cards();
+
+      this->cards_window.scroll_to_offset(this->cards_window_offset);
+
+      this->focus_next();
+    }
+  }
+}
+
+size_t ColumnWin::get_absolute_focused_index() {
+  return this->cards_window_offset + this->focused_index;
 }

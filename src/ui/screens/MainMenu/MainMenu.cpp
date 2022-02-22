@@ -6,7 +6,7 @@
 #include "../../helpers/win_center_text/win_center_text.h"
 #include "../Board/Board.h"
 
-MainMenu::MainMenu(DataManager *data_manager)
+MainMenu::MainMenu(DataManager *data_manager, Config *config)
     : height{(int)(getmaxy(stdscr) * 0.3)}, width{(int)(getmaxx(stdscr) * 0.2)},
       start_y{(getmaxy(stdscr) / 2) - (this->height / 2)},
       start_x{(getmaxx(stdscr) / 2) - (this->width / 2)},
@@ -20,6 +20,7 @@ MainMenu::MainMenu(DataManager *data_manager)
   refresh();
 
   this->data_manager = data_manager;
+  this->config = config;
   this->boards_names = this->data_manager->get_boards_names();
   this->boards_count = this->boards_names.size();
   this->highlighted_index = 0;
@@ -211,7 +212,8 @@ void MainMenu::handle_key_press(char key) {
       string board_to_open =
           *(this->menu_window.window_start + this->highlighted_index);
 
-      BoardScreen board_screen(board_to_open, this->data_manager, true);
+      BoardScreen board_screen(board_to_open, this->data_manager, this->config,
+                               true);
       board_screen.show();
 
       // restoring previous look of menu window

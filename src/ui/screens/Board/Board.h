@@ -1,12 +1,14 @@
 #pragma once
 
+#include "../../../Config/Config.h"
 #include "../../../DataManager/DataManager.h"
 #include "../../components/ColumnWin/ColumnWin.h"
 #include "../../components/ScrollableWindow/ScrollableWindow.h"
 
 class BoardScreen {
 public:
-  BoardScreen(string board_name, DataManager *data_manager, bool from_tui);
+  BoardScreen(string board_name, DataManager *data_manager, Config *config,
+              bool from_tui);
 
   void show();
 
@@ -23,6 +25,7 @@ private:
 
   Board *board;
   DataManager *data_manager;
+  Config *config;
   vector<ColumnWin> columns;
   size_t columns_count;
   ScrollableWindow<ColumnWin> columns_window;

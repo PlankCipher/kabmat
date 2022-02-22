@@ -5,7 +5,7 @@
 #include "../../helpers/win_center_text/win_center_text.h"
 
 BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
-                         bool from_tui)
+                         Config *config, bool from_tui)
     : height{getmaxy(stdscr) - 4}, width{getmaxx(stdscr) - 2}, start_y{2},
       start_x{1}, columns_window{ScrollableWindow<ColumnWin>(
                       this->height, this->width, this->start_y, this->start_x,
@@ -18,6 +18,7 @@ BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
   refresh();
 
   this->data_manager = data_manager;
+  this->config = config;
   this->board = this->data_manager->get_board_if_exists(board_name);
 
   for (size_t i = 0; i < this->board->columns.size(); ++i) {
@@ -165,6 +166,100 @@ bool BoardScreen::handle_key_press(char key) {
       vector<ColumnWin> shown_columns =
           this->columns_window.get_current_window();
       shown_columns[this->focused_index].focus_last();
+      *(this->columns_window.window_start + this->focused_index) =
+          shown_columns[this->focused_index];
+    }
+
+    break;
+  }
+  case 'H': {
+    // move card to left/prev column
+    if (this->columns_count > 0) {
+      // scroll offset + current focused index
+      size_t src_index =
+          (this->columns_window.window_start - this->columns.begin()) +
+          this->focused_index;
+
+      ColumnWin *src_column = &(this->columns[src_index]);
+
+      if (src_column->cards_count > 0) {
+        size_t dist_index = src_index - 1;
+        size_t card_index = src_column->get_absolute_focused_index();
+
+        bool moved = this->data_manager->move_card_to_prev_column(
+            this->board, card_index, src_index, dist_index, this->config);
+
+        if (moved) {
+          src_column->update_cards();
+          src_column->show(src_column->start_x);
+
+          if (card_index == src_column->cards_count)
+            src_column->focus_last();
+
+          this->columns[dist_index].update_cards();
+          this->columns[dist_index].show(this->columns[dist_index].start_x);
+
+          this->focus_current();
+        }
+      }
+    }
+
+    break;
+  }
+  case 'L': {
+    // move card to right/next column
+    if (this->columns_count > 0) {
+      // scroll offset + current focused index
+      size_t src_index =
+          (this->columns_window.window_start - this->columns.begin()) +
+          this->focused_index;
+
+      ColumnWin *src_column = &(this->columns[src_index]);
+
+      if (src_column->cards_count > 0) {
+        size_t dist_index = src_index + 1;
+        size_t card_index = src_column->get_absolute_focused_index();
+
+        bool moved = this->data_manager->move_card_to_next_column(
+            this->board, card_index, src_index, dist_index, this->config);
+
+        if (moved) {
+          src_column->update_cards();
+          src_column->show(src_column->start_x);
+
+          if (card_index == src_column->cards_count)
+            src_column->focus_last();
+
+          this->columns[dist_index].update_cards();
+          this->columns[dist_index].show(this->columns[dist_index].start_x);
+
+          this->focus_current();
+        }
+      }
+    }
+
+    break;
+  }
+  case 'K': {
+    // move card up in column
+    if (this->columns_count > 0) {
+      vector<ColumnWin> shown_columns =
+          this->columns_window.get_current_window();
+      shown_columns[this->focused_index].move_focused_card_up(
+          this->data_manager);
+      *(this->columns_window.window_start + this->focused_index) =
+          shown_columns[this->focused_index];
+    }
+
+    break;
+  }
+  case 'J': {
+    // move card down in column
+    if (this->columns_count > 0) {
+      vector<ColumnWin> shown_columns =
+          this->columns_window.get_current_window();
+      shown_columns[this->focused_index].move_focused_card_down(
+          this->data_manager);
       *(this->columns_window.window_start + this->focused_index) =
           shown_columns[this->focused_index];
     }
