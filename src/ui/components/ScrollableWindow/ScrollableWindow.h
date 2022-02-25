@@ -38,17 +38,25 @@ public:
   }
 
   void scroll_up(bool redraw = true) {
-    this->window_start = max(this->items->begin(), this->window_start - 1);
-    this->window_end = this->window_start +
-                       min(*this->items_count, (size_t)this->max_items_in_win);
+    if (*this->items_count > 0) {
+      this->window_start = max(this->items->begin(), this->window_start - 1);
+      this->window_end =
+          this->window_start +
+          min(*this->items_count, (size_t)this->max_items_in_win);
+    }
+
     if (redraw)
       this->draw();
   }
 
   void scroll_down(bool redraw = true) {
-    this->window_end = min(this->items->end(), this->window_end + 1);
-    this->window_start = this->window_end - min(*this->items_count,
-                                                (size_t)this->max_items_in_win);
+    if (*this->items_count > 0) {
+      this->window_end = min(this->items->end(), this->window_end + 1);
+      this->window_start =
+          this->window_end -
+          min(*this->items_count, (size_t)this->max_items_in_win);
+    }
+
     if (redraw)
       this->draw();
   }
@@ -60,22 +68,31 @@ public:
           this->window_start +
           min(*this->items_count, (size_t)this->max_items_in_win);
     }
+
     if (redraw)
       this->draw();
   }
 
   void scroll_to_bottom(bool redraw = true) {
-    this->window_end = this->items->end();
-    this->window_start = this->window_end - min(*this->items_count,
-                                                (size_t)this->max_items_in_win);
+    if (*this->items_count > 0) {
+      this->window_end = this->items->end();
+      this->window_start =
+          this->window_end -
+          min(*this->items_count, (size_t)this->max_items_in_win);
+    }
+
     if (redraw)
       this->draw();
   }
 
   void scroll_to_offset(size_t offset, bool redraw = true) {
-    this->window_start = this->items->begin() + offset;
-    this->window_end = this->window_start +
-                       min(*this->items_count, (size_t)this->max_items_in_win);
+    if (*this->items_count > 0) {
+      this->window_start = this->items->begin() + offset;
+      this->window_end =
+          this->window_start +
+          min(*this->items_count, (size_t)this->max_items_in_win);
+    }
+
     if (redraw)
       this->draw();
   }

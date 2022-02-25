@@ -36,7 +36,7 @@ void BoardScreen::show() {
   Header header(this->board->name);
   header.show();
 
-  Footer footer(false, true);
+  Footer footer(true, true);
   footer.show();
 
   this->columns_window.scroll_to_top();

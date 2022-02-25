@@ -9,6 +9,7 @@ using namespace std;
 Footer::Footer(bool show_mode, bool show_help_hint) {
   this->show_mode = show_mode;
   this->show_help_hint = show_help_hint;
+  this->mode = MODE_NORMAL;
 }
 
 void Footer::show() {
@@ -16,9 +17,12 @@ void Footer::show() {
   getmaxyx(stdscr, y_max, x_max);
 
   // mode
-  if (this->show_mode)
-    // TODO: use real mode
-    mvprintw(y_max - 1, 1, "NORMAL");
+  if (this->show_mode) {
+    attron(COLOR_PAIR(COLOR_PAIR_MODE));
+    mvprintw(getmaxy(stdscr) - 1, 0,
+             this->mode == MODE_NORMAL ? " NORMAL " : " INSERT ");
+    attroff(COLOR_PAIR(COLOR_PAIR_MODE));
+  }
 
   // centered program info
   string info = string(NAME) + " " + string(VERSION);
@@ -29,7 +33,7 @@ void Footer::show() {
   if (this->show_help_hint)
     mvprintw(y_max - 1, x_max - 11, "? for help");
 
-  mvchgat(y_max - 1, 0, x_max, A_NORMAL, COLOR_PAIR_FOOTER, NULL);
+  mvchgat(y_max - 1, 8, x_max, A_NORMAL, COLOR_PAIR_FOOTER, NULL);
 
   refresh();
 }

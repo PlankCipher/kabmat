@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
     use_default_colors();
 
     init_pair(COLOR_PAIR_FOOTER, COLOR_BLACK, COLOR_WHITE);
+    init_pair(COLOR_PAIR_MODE, COLOR_BLACK, COLOR_BLUE);
     init_pair(COLOR_PAIR_HEADER, COLOR_BLACK, COLOR_WHITE);
     init_pair(COLOR_PAIR_BORDER, COLOR_WHITE, -1);
 

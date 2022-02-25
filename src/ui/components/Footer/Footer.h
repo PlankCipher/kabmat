@@ -9,4 +9,5 @@ public:
 private:
   bool show_mode;
   bool show_help_hint;
+  int mode;
 };

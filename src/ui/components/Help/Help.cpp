@@ -46,10 +46,26 @@ void Help::show() {
       "",
       "",
       "Input Field keybindings:",
-      "Esc                cancel and close the input field",
-      "Enter              submit and close the input field",
-      "Backspace/Delete   delete last character entered",
-      "(Any other character is inserted into the input field)",
+      "  Normal mode:",
+      "  Esc, q   cancel and close the input field",
+      "  Enter    submit and close the input field",
+      "  h        move cursor one character to the left",
+      "  l        move cursor one character to the right",
+      "  0        move cursor to the start of the line",
+      "  $        move cursor to the end of the line",
+      "  i        change mode to insert",
+      "  a        move cursor one character to the right and change mode to "
+      "insert",
+      "  I        move cursor to the start of the line and change mode to "
+      "insert",
+      "  A        move cursor to the end of the line and change mode to insert",
+      "  S        delete everything on the line and change mode to insert",
+      "",
+      "  Insert mode:",
+      "  Esc                change mode to normal",
+      "  Enter              submit and close the input field",
+      "  Backspace/Delete   delete the character before the cursor",
+      "  (Any other key is inserted before the cursor)",
   };
   size_t message_lines_count = message_lines.size();
 

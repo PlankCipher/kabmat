@@ -3,6 +3,8 @@
 #include <ncurses.h>
 #include <string>
 
+#include "../ScrollableWindow/ScrollableWindow.h"
+
 using namespace std;
 
 class Input {
@@ -12,6 +14,8 @@ public:
 
   string show();
 
+  bool handle_key_press(char key);
+
   int height;
   int width;
   int start_y;
@@ -19,12 +23,25 @@ public:
   WINDOW *window;
 
 private:
-  bool handle_key_press(char key);
-  void update_ends();
+  void draw_content(vector<char> shown_content, WINDOW *scrollable_window);
 
-  string content;
+  bool normal_mode_key_handler(char key);
+  bool insert_mode_key_handler(char key);
+
+  void move_to_start();
+  void move_to_end();
+  void move_cursor_left();
+  void move_cursor_right();
+  void change_mode(int mode);
+
+  int cursor_y;
+  int cursor_x;
+
+  int mode;
+
   string title;
 
-  size_t right_end;
-  size_t left_end;
+  vector<char> content_chars;
+  size_t content_size;
+  ScrollableWindow<char> content_window;
 };

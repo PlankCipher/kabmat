@@ -43,7 +43,7 @@ void MainMenu::setup_window() {
 }
 
 void MainMenu::show() {
-  Footer footer(false, true);
+  Footer footer(true, true);
   footer.show();
 
   this->menu_window.scroll_to_top();
@@ -220,7 +220,7 @@ void MainMenu::handle_key_press(char key) {
       erase();
       refresh();
 
-      Footer footer(false, true);
+      Footer footer(true, true);
       footer.show();
 
       this->setup_window();
