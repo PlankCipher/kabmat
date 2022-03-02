@@ -17,6 +17,7 @@ MainMenu::MainMenu(DataManager *data_manager, Config *config)
                placeholders::_2))} {
   this->window =
       newwin(this->height, this->width, this->start_y, this->start_x);
+  keypad(this->window, true);
   refresh();
 
   this->data_manager = data_manager;

@@ -52,19 +52,6 @@ void DataManager::create_board(string name) {
   }
 }
 
-void DataManager::delete_board(string name) {
-  this->get_board_if_exists(name);
-
-  vector<Board> *boards = &this->boards;
-
-  for (vector<Board>::reverse_iterator i = boards->rbegin();
-       i != boards->rend(); ++i)
-    if ((*i).name == name)
-      boards->erase(i.base() - 1);
-
-  this->write_data_to_file();
-}
-
 void DataManager::rename_board(string old_name, string new_name) {
   new_name = remove_trim_spaces(new_name);
 
@@ -78,13 +65,27 @@ void DataManager::rename_board(string old_name, string new_name) {
   this->write_data_to_file();
 }
 
+void DataManager::delete_board(string name) {
+  this->get_board_if_exists(name);
+
+  vector<Board> *boards = &this->boards;
+
+  for (vector<Board>::reverse_iterator i = boards->rbegin();
+       i != boards->rend(); ++i)
+    if ((*i).name == name)
+      boards->erase(i.base() - 1);
+
+  this->write_data_to_file();
+}
+
 void DataManager::create_column(Board *board, string title) {
   board->add_column(title);
   this->write_data_to_file();
 }
 
-void DataManager::rename_column(Column *column, string new_title) {
-  column->title = remove_trim_spaces(new_title);
+void DataManager::rename_column(Board *board, size_t column_index,
+                                string new_title) {
+  board->rename_column(column_index, new_title);
   this->write_data_to_file();
 }
 

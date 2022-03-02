@@ -11,6 +11,10 @@ void Board::add_column(string title) {
   this->columns.push_back(column);
 }
 
+void Board::rename_column(size_t column_index, string new_title) {
+  this->columns[column_index].title = remove_trim_spaces(new_title);
+}
+
 void Board::delete_column(size_t column_index) {
   this->columns.erase(this->columns.begin() + column_index);
 }

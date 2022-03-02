@@ -11,6 +11,7 @@ public:
 
   void add_card(string content, bool put_at_bottom = true);
   void delete_card(size_t card_index);
+
   bool move_card_up(size_t card_index);
   bool move_card_down(size_t card_index);
 

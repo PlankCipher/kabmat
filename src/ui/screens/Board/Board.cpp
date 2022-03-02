@@ -16,6 +16,7 @@ BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
                       3)} {
   this->window =
       newwin(this->height, this->width, this->start_y, this->start_x);
+  keypad(this->window, true);
   refresh();
 
   this->data_manager = data_manager;
@@ -301,13 +302,15 @@ bool BoardScreen::handle_key_press(char key) {
   case 'r': {
     // edit title of highlighted column
     if (this->columns_count > 0) {
-      Column *column_to_rename =
-          (this->columns_window.window_start + this->focused_index)->column;
-      string new_title =
-          this->create_input_window(" Rename Column ", column_to_rename->title);
+      size_t col_to_rename_index =
+          (this->columns_window.window_start - this->columns.begin()) +
+          this->focused_index;
+      string new_title = this->create_input_window(
+          " Rename Column ", this->board->columns[col_to_rename_index].title);
 
       if (new_title.length() > 0) {
-        this->data_manager->rename_column(column_to_rename, new_title);
+        this->data_manager->rename_column(this->board, col_to_rename_index,
+                                          new_title);
         this->columns_window.draw();
       }
     }
