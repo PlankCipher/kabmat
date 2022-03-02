@@ -11,6 +11,8 @@ public:
 
   void add_column(string title);
 
+  void delete_column(size_t column_index);
+
   bool move_card_to_prev_column(size_t card_index, size_t src_column_index,
                                 size_t dist_column_index, Config *config);
   bool move_card_to_next_column(size_t card_index, size_t src_column_index,

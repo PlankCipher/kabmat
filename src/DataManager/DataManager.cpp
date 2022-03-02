@@ -88,6 +88,11 @@ void DataManager::rename_column(Column *column, string new_title) {
   this->write_data_to_file();
 }
 
+void DataManager::delete_column(Board *board, size_t column_index) {
+  board->delete_column(column_index);
+  this->write_data_to_file();
+}
+
 bool DataManager::move_card_up(Column *column, size_t card_index) {
   bool moved = column->move_card_up(card_index);
   this->write_data_to_file();

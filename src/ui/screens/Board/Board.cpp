@@ -301,15 +301,40 @@ bool BoardScreen::handle_key_press(char key) {
   case 'r': {
     // edit title of highlighted column
     if (this->columns_count > 0) {
-      Column *curr_column =
+      Column *column_to_rename =
           (this->columns_window.window_start + this->focused_index)->column;
       string new_title =
-          this->create_input_window(" Rename Column ", curr_column->title);
+          this->create_input_window(" Rename Column ", column_to_rename->title);
 
       if (new_title.length() > 0) {
-        this->data_manager->rename_column(curr_column, new_title);
+        this->data_manager->rename_column(column_to_rename, new_title);
         this->columns_window.draw();
       }
+    }
+
+    break;
+  }
+  case 'D': {
+    // delete highlighted column
+    if (this->columns_count > 0) {
+      size_t col_to_del_index =
+          (this->columns_window.window_start - this->columns.begin()) +
+          this->focused_index;
+      this->data_manager->delete_column(this->board, col_to_del_index);
+
+      this->columns = {};
+      for (size_t i = 0; i < this->board->columns.size(); ++i) {
+        // -4 because of 2 spaces between
+        // each pair of shown columns
+        int width = (this->width - 4) / 3;
+        this->columns.push_back(ColumnWin(this->height, width, this->start_y,
+                                          &this->board->columns[i]));
+      }
+      this->columns_count = this->columns.size();
+
+      this->focused_index =
+          min((size_t)this->focused_index, this->columns_count - 1);
+      this->columns_window.scroll_to_top();
     }
 
     break;

@@ -11,6 +11,10 @@ void Board::add_column(string title) {
   this->columns.push_back(column);
 }
 
+void Board::delete_column(size_t column_index) {
+  this->columns.erase(this->columns.begin() + column_index);
+}
+
 bool Board::move_card_to_prev_column(size_t card_index, size_t src_column_index,
                                      size_t dist_column_index, Config *config) {
   if (src_column_index > 0) {
