@@ -2,6 +2,7 @@
 #include "../../components/Footer/Footer.h"
 #include "../../components/Header/Header.h"
 #include "../../components/Help/Help.h"
+#include "../../components/Input/Input.h"
 #include "../../helpers/win_center_text/win_center_text.h"
 
 BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
@@ -22,6 +23,8 @@ BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
   this->board = this->data_manager->get_board_if_exists(board_name);
 
   for (size_t i = 0; i < this->board->columns.size(); ++i) {
+    // -4 because of 2 spaces between
+    // each pair of shown columns
     int width = (this->width - 4) / 3;
     this->columns.push_back(ColumnWin(this->height, width, this->start_y,
                                       &this->board->columns[i]));
@@ -81,6 +84,7 @@ void BoardScreen::focus_current() {
 bool BoardScreen::handle_key_press(char key) {
   switch (key) {
   case 'q': {
+    // quit
     if (this->from_tui)
       return true;
 
@@ -90,6 +94,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case '?': {
+    // help
     Help help_window;
     help_window.show();
 
@@ -266,7 +271,51 @@ bool BoardScreen::handle_key_press(char key) {
 
     break;
   }
+  case 'C': {
+    // create a column
+    string column_title = this->create_input_window(" New Column Name ");
+
+    if (column_title.length() > 0) {
+      this->data_manager->create_column(this->board, column_title);
+
+      this->columns = {};
+      for (size_t i = 0; i < this->board->columns.size(); ++i) {
+        // -4 because of 2 spaces between
+        // each pair of shown columns
+        int width = (this->width - 4) / 3;
+        this->columns.push_back(ColumnWin(this->height, width, this->start_y,
+                                          &this->board->columns[i]));
+      }
+      this->columns_count = this->columns.size();
+
+      // focus the just created column
+      this->focused_index =
+          min((size_t)this->columns_window.max_items_in_win - 1,
+              this->columns_count - 1);
+      this->columns_window.scroll_to_bottom();
+    }
+
+    break;
+  }
   }
 
   return false;
+}
+
+string BoardScreen::create_input_window(string title, string content) {
+  int max_y, max_x;
+  getmaxyx(stdscr, max_y, max_x);
+
+  int height = 3;
+  int width = max_x * 0.4;
+
+  int start_y = (max_y / 2) - (height / 2);
+  int start_x = (max_x / 2) - (width / 2);
+
+  Input input_bar(height, width, start_y, start_x, content, title);
+  string input = input_bar.show();
+
+  this->columns_window.draw();
+
+  return input;
 }

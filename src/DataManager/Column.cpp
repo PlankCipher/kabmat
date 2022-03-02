@@ -12,7 +12,7 @@ void Column::add_card(string content, bool put_at_bottom) {
   if (put_at_bottom)
     this->cards.push_back(remove_trim_spaces(content));
   else
-    this->cards.insert(this->cards.begin(), content);
+    this->cards.insert(this->cards.begin(), remove_trim_spaces(content));
 }
 
 void Column::delete_card(size_t card_index) {

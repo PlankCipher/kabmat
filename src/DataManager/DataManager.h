@@ -7,9 +7,12 @@ public:
   DataManager();
 
   void add_board(string name);
+
   void create_board(string name);
   void rename_board(string old_name, string new_name);
   void delete_board(string name);
+
+  void create_column(Board *board, string title);
 
   bool move_card_up(Column *column, size_t card_index);
   bool move_card_down(Column *column, size_t card_index);

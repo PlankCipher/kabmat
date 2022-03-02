@@ -78,6 +78,11 @@ void DataManager::rename_board(string old_name, string new_name) {
   this->write_data_to_file();
 }
 
+void DataManager::create_column(Board *board, string title) {
+  board->add_column(title);
+  this->write_data_to_file();
+}
+
 bool DataManager::move_card_up(Column *column, size_t card_index) {
   bool moved = column->move_card_up(card_index);
   this->write_data_to_file();

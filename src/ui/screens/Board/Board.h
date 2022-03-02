@@ -23,6 +23,8 @@ private:
   bool handle_key_press(char key);
   void focus_current();
 
+  string create_input_window(string title, string content = "");
+
   Board *board;
   DataManager *data_manager;
   Config *config;
