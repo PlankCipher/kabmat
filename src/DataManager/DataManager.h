@@ -13,6 +13,7 @@ public:
   void delete_board(string name);
 
   void create_column(Board *board, string title);
+  void rename_column(Column *column, string new_title);
 
   bool move_card_up(Column *column, size_t card_index);
   bool move_card_down(Column *column, size_t card_index);

@@ -36,11 +36,11 @@ public:
   size_t cards_count;
   int focused_index;
 
+  Column *column;
+
 private:
   void draw_cards(vector<CardWin> shown_cards, WINDOW *scrollable_window);
   void setup_cards_window();
-
-  Column *column;
 
   vector<CardWin> cards;
   ScrollableWindow<CardWin> cards_window;

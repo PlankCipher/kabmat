@@ -297,6 +297,23 @@ bool BoardScreen::handle_key_press(char key) {
 
     break;
   }
+  case 'E':
+  case 'r': {
+    // edit title of highlighted column
+    if (this->columns_count > 0) {
+      Column *curr_column =
+          (this->columns_window.window_start + this->focused_index)->column;
+      string new_title =
+          this->create_input_window(" Rename Column ", curr_column->title);
+
+      if (new_title.length() > 0) {
+        this->data_manager->rename_column(curr_column, new_title);
+        this->columns_window.draw();
+      }
+    }
+
+    break;
+  }
   }
 
   return false;
