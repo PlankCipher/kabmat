@@ -19,6 +19,22 @@ void Board::delete_column(size_t column_index) {
   this->columns.erase(this->columns.begin() + column_index);
 }
 
+bool Board::move_column_left(size_t column_index) {
+  if (column_index > 0) {
+    swap(this->columns[column_index], this->columns[column_index - 1]);
+    return true;
+  }
+  return false;
+}
+
+bool Board::move_column_right(size_t column_index) {
+  if (column_index < this->columns.size() - 1) {
+    swap(this->columns[column_index], this->columns[column_index + 1]);
+    return true;
+  }
+  return false;
+}
+
 bool Board::move_card_to_prev_column(size_t card_index, size_t src_column_index,
                                      size_t dist_column_index, Config *config) {
   if (src_column_index > 0) {

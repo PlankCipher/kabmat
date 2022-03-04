@@ -94,15 +94,31 @@ void DataManager::delete_column(Board *board, size_t column_index) {
   this->write_data_to_file();
 }
 
+bool DataManager::move_column_left(Board *board, size_t column_index) {
+  bool moved = board->move_column_left(column_index);
+  if (moved)
+    this->write_data_to_file();
+  return moved;
+}
+
+bool DataManager::move_column_right(Board *board, size_t column_index) {
+  bool moved = board->move_column_right(column_index);
+  if (moved)
+    this->write_data_to_file();
+  return moved;
+}
+
 bool DataManager::move_card_up(Column *column, size_t card_index) {
   bool moved = column->move_card_up(card_index);
-  this->write_data_to_file();
+  if (moved)
+    this->write_data_to_file();
   return moved;
 }
 
 bool DataManager::move_card_down(Column *column, size_t card_index) {
   bool moved = column->move_card_down(card_index);
-  this->write_data_to_file();
+  if (moved)
+    this->write_data_to_file();
   return moved;
 }
 
@@ -111,7 +127,8 @@ bool DataManager::move_card_to_prev_column(Board *board, size_t card_index,
                                            Config *config) {
   bool moved = board->move_card_to_prev_column(card_index, src_index,
                                                dist_index, config);
-  this->write_data_to_file();
+  if (moved)
+    this->write_data_to_file();
   return moved;
 }
 
@@ -120,7 +137,8 @@ bool DataManager::move_card_to_next_column(Board *board, size_t card_index,
                                            Config *config) {
   bool moved = board->move_card_to_next_column(card_index, src_index,
                                                dist_index, config);
-  this->write_data_to_file();
+  if (moved)
+    this->write_data_to_file();
   return moved;
 }
 

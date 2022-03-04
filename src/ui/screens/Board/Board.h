@@ -23,6 +23,7 @@ private:
   bool handle_key_press(char key);
   void focus_current();
 
+  void setup_columns();
   string create_input_window(string title, string content = "");
 
   Board *board;

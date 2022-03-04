@@ -23,6 +23,14 @@ BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
   this->config = config;
   this->board = this->data_manager->get_board_if_exists(board_name);
 
+  this->setup_columns();
+  this->focused_index = 0;
+
+  this->from_tui = from_tui;
+}
+
+void BoardScreen::setup_columns() {
+  this->columns = {};
   for (size_t i = 0; i < this->board->columns.size(); ++i) {
     // -4 because of 2 spaces between
     // each pair of shown columns
@@ -31,9 +39,6 @@ BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
                                       &this->board->columns[i]));
   }
   this->columns_count = this->columns.size();
-  this->focused_index = 0;
-
-  this->from_tui = from_tui;
 }
 
 void BoardScreen::show() {
@@ -268,6 +273,55 @@ bool BoardScreen::handle_key_press(char key) {
           this->data_manager);
       *(this->columns_window.window_start + this->focused_index) =
           shown_columns[this->focused_index];
+    }
+
+    break;
+  }
+  case ('h' & 0x1f): {
+    // move column to the left
+    if (this->columns_count > 0) {
+      size_t col_to_mov_index =
+          (this->columns_window.window_start - this->columns.begin()) +
+          this->focused_index;
+      bool moved =
+          this->data_manager->move_column_left(this->board, col_to_mov_index);
+
+      if (moved) {
+        this->setup_columns();
+
+        // focus left column
+        if (--this->focused_index == -1) {
+          this->focused_index = 0;
+          this->columns_window.scroll_up();
+        } else
+          this->columns_window.draw();
+      }
+    }
+
+    break;
+  }
+  case ('l' & 0x1f): {
+    // move column to the right
+    if (this->columns_count > 0) {
+      size_t col_to_mov_index =
+          (this->columns_window.window_start - this->columns.begin()) +
+          this->focused_index;
+      bool moved =
+          this->data_manager->move_column_right(this->board, col_to_mov_index);
+
+      if (moved) {
+        this->setup_columns();
+
+        // focus right column
+        this->focused_index =
+            min(this->columns_count - 1, (size_t)this->focused_index + 1);
+
+        if (this->focused_index == this->columns_window.max_items_in_win) {
+          this->focused_index = this->columns_window.max_items_in_win - 1;
+          this->columns_window.scroll_down();
+        } else
+          this->columns_window.draw();
+      }
     }
 
     break;
