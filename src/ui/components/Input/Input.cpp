@@ -35,20 +35,24 @@ Input::Input(int height, int width, int start_y, int start_x, string content,
   curs_set(1);
 }
 
-string Input::show() {
+void Input::show(bool grab_input) {
   this->content_window.scroll_to_bottom();
 
-  char key;
-  bool done = false;
-  while (!done && (key = wgetch(this->window))) {
-    done = this->handle_key_press(key);
+  if (grab_input) {
+    char key;
+    bool done = false;
+    while (!done && (key = wgetch(this->window))) {
+      done = this->handle_key_press(key);
+    }
+
+    // clean up
+    curs_set(0);
+    werase(this->window);
+    wrefresh(this->window);
   }
+}
 
-  // clean up
-  curs_set(0);
-  werase(this->window);
-  wrefresh(this->window);
-
+string Input::get_value() {
   string content = "";
   for (size_t i = 0; i < this->content_chars.size(); ++i)
     content += this->content_chars[i];

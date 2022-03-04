@@ -12,10 +12,12 @@ public:
   Input(int height, int width, int start_y, int start_x, string content = "",
         string title = "", bool focused = false);
 
-  string show();
+  void show(bool grab_input = false);
 
   void focus();
   void unfocus();
+
+  string get_value();
 
   bool handle_key_press(char key);
 

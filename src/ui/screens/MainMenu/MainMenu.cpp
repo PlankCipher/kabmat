@@ -244,7 +244,8 @@ string MainMenu::create_input_window(string title, string content,
   int start_x = (max_x / 2) - (width / 2);
 
   Input input_bar(height, width, start_y, start_x, content, title, focused);
-  string input = input_bar.show();
+  input_bar.show(true);
+  string input = input_bar.get_value();
 
   this->setup_window();
 
