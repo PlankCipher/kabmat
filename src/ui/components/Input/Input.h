@@ -10,9 +10,12 @@ using namespace std;
 class Input {
 public:
   Input(int height, int width, int start_y, int start_x, string content = "",
-        string title = "");
+        string title = "", bool focused = false);
 
   string show();
+
+  void focus();
+  void unfocus();
 
   bool handle_key_press(char key);
 
@@ -36,6 +39,8 @@ private:
 
   int cursor_y;
   int cursor_x;
+
+  bool focused;
 
   int mode;
 

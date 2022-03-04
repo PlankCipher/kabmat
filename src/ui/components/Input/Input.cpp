@@ -3,7 +3,7 @@
 #include "../../../helpers/remove_trim_spaces/remove_trim_spaces.h"
 
 Input::Input(int height, int width, int start_y, int start_x, string content,
-             string title)
+             string title, bool focused)
     : height{height}, width{width}, start_y{start_y}, start_x{start_x},
       content_window{
           this->height,
@@ -25,6 +25,8 @@ Input::Input(int height, int width, int start_y, int start_x, string content,
   this->cursor_y = 1;
   this->cursor_x = min(this->content_size + 1,
                        (size_t)this->content_window.max_items_in_win + 1);
+
+  this->focused = focused;
 
   this->title = title;
 
@@ -58,11 +60,10 @@ void Input::draw_content(vector<char> shown_content,
                          [[maybe_unused]] WINDOW *scrollable_window) {
   werase(this->window);
 
-  wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
-  box(this->window, 0, 0);
-  wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
-
-  mvwprintw(this->window, 0, 1, "%s", this->title.c_str());
+  if (this->focused)
+    this->focus();
+  else
+    this->unfocus();
 
   if (shown_content.size() > 0) {
     string content = "";
@@ -75,6 +76,23 @@ void Input::draw_content(vector<char> shown_content,
   wmove(this->window, this->cursor_y, this->cursor_x);
 
   wrefresh(this->window);
+}
+
+void Input::focus() {
+  wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+  box(this->window, 0, 0);
+  wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+
+  mvwprintw(this->window, 0, 1, "%s", this->title.c_str());
+
+  this->focused = true;
+}
+
+void Input::unfocus() {
+  box(this->window, 0, 0);
+  mvwprintw(this->window, 0, 1, "%s", this->title.c_str());
+
+  this->focused = false;
 }
 
 bool Input::handle_key_press(char key) {

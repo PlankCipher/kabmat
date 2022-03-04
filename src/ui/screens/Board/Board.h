@@ -24,7 +24,8 @@ private:
   void focus_current();
 
   void setup_columns();
-  string create_input_window(string title, string content = "");
+  string create_input_window(string title, string content = "",
+                             bool focused = false);
 
   Board *board;
   DataManager *data_manager;

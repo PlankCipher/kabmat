@@ -278,6 +278,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case ('h' & 0x1f): {
+    // ctrl + h
     // move column to the left
     if (this->columns_count > 0) {
       size_t col_to_mov_index =
@@ -301,6 +302,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case ('l' & 0x1f): {
+    // ctrl + l
     // move column to the right
     if (this->columns_count > 0) {
       size_t col_to_mov_index =
@@ -328,7 +330,8 @@ bool BoardScreen::handle_key_press(char key) {
   }
   case 'C': {
     // create a column
-    string column_title = this->create_input_window(" New Column Name ");
+    string column_title =
+        this->create_input_window(" New Column Name ", "", true);
 
     if (column_title.length() > 0) {
       this->data_manager->create_column(this->board, column_title);
@@ -360,7 +363,8 @@ bool BoardScreen::handle_key_press(char key) {
           (this->columns_window.window_start - this->columns.begin()) +
           this->focused_index;
       string new_title = this->create_input_window(
-          " Rename Column ", this->board->columns[col_to_rename_index].title);
+          " Rename Column ", this->board->columns[col_to_rename_index].title,
+          true);
 
       if (new_title.length() > 0) {
         this->data_manager->rename_column(this->board, col_to_rename_index,
@@ -401,7 +405,8 @@ bool BoardScreen::handle_key_press(char key) {
   return false;
 }
 
-string BoardScreen::create_input_window(string title, string content) {
+string BoardScreen::create_input_window(string title, string content,
+                                        bool focused) {
   int max_y, max_x;
   getmaxyx(stdscr, max_y, max_x);
 
@@ -411,7 +416,7 @@ string BoardScreen::create_input_window(string title, string content) {
   int start_y = (max_y / 2) - (height / 2);
   int start_x = (max_x / 2) - (width / 2);
 
-  Input input_bar(height, width, start_y, start_x, content, title);
+  Input input_bar(height, width, start_y, start_x, content, title, focused);
   string input = input_bar.show();
 
   this->columns_window.draw();

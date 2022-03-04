@@ -170,7 +170,7 @@ void MainMenu::handle_key_press(char key) {
   }
   case 'c': {
     // create board
-    string board_name = this->create_input_window(" New Board Name ");
+    string board_name = this->create_input_window(" New Board Name ", "", true);
 
     if (board_name.length() > 0) {
       this->data_manager->create_board(board_name);
@@ -192,7 +192,8 @@ void MainMenu::handle_key_press(char key) {
     if (this->boards_count > 0) {
       string old_name =
           *(this->menu_window.window_start + this->highlighted_index);
-      string new_name = this->create_input_window(" Rename Board ", old_name);
+      string new_name =
+          this->create_input_window(" Rename Board ", old_name, true);
 
       if (new_name.length() > 0) {
         size_t offset =
@@ -231,7 +232,8 @@ void MainMenu::handle_key_press(char key) {
   }
 }
 
-string MainMenu::create_input_window(string title, string content) {
+string MainMenu::create_input_window(string title, string content,
+                                     bool focused) {
   int max_y, max_x;
   getmaxyx(stdscr, max_y, max_x);
 
@@ -241,7 +243,7 @@ string MainMenu::create_input_window(string title, string content) {
   int start_y = (max_y / 2) - (height / 2);
   int start_x = (max_x / 2) - (width / 2);
 
-  Input input_bar(height, width, start_y, start_x, content, title);
+  Input input_bar(height, width, start_y, start_x, content, title, focused);
   string input = input_bar.show();
 
   this->setup_window();

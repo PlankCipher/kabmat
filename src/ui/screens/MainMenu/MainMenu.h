@@ -21,7 +21,8 @@ private:
   void draw_menu_items(vector<string> shown_boards, WINDOW *scrollable_window);
   void highlight_current();
   void handle_key_press(char key);
-  string create_input_window(string title, string content = "");
+  string create_input_window(string title, string content = "",
+                             bool focused = false);
 
   DataManager *data_manager;
   Config *config;
