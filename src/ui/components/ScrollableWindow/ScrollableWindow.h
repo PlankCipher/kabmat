@@ -87,7 +87,9 @@ public:
 
   void scroll_to_offset(size_t offset, bool redraw = true) {
     if (*this->items_count > 0) {
-      this->window_start = this->items->begin() + offset;
+      this->window_start =
+          this->items->begin() +
+          min(offset, *this->items_count - this->max_items_in_win + 1);
       this->window_end =
           this->window_start +
           min(*this->items_count, (size_t)this->max_items_in_win);

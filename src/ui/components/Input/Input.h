@@ -28,16 +28,23 @@ public:
   WINDOW *window;
 
 private:
-  void draw_content(vector<char> shown_content, WINDOW *scrollable_window);
+  void draw_content(vector<string> shown_content, WINDOW *scrollable_window);
+  void draw_first_line(vector<char> shown_content, WINDOW *scrollable_window);
 
   bool normal_mode_key_handler(char key);
   bool insert_mode_key_handler(char key);
 
-  void move_to_start();
-  void move_to_end();
   void move_cursor_left();
   void move_cursor_right();
+  void move_cursor_up();
+  void move_cursor_down();
+  void move_cursor_to_first_char();
+  void move_cursor_to_last_char();
+  void move_cursor_to_first_line();
+  void move_cursor_to_last_line();
   void change_mode(int mode);
+
+  size_t curr_line_index();
 
   int cursor_y;
   int cursor_x;
@@ -45,10 +52,16 @@ private:
   bool focused;
 
   int mode;
-
+  bool multi_row;
   string title;
 
-  vector<char> content_chars;
+  vector<string> content;
   size_t content_size;
-  ScrollableWindow<char> content_window;
+  ScrollableWindow<string> content_window;
+
+  vector<char> first_line_chars;
+  size_t first_line_size;
+  ScrollableWindow<char> first_line_window;
+
+  vector<bool> line_has_newline;
 };

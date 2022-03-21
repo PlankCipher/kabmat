@@ -53,6 +53,10 @@ void Help::show() {
       "  l        move cursor one character to the right",
       "  0        move cursor to the start of the line",
       "  $        move cursor to the end of the line",
+      "  k        move cursor up one line (in multi-row input only)",
+      "  j        move cursor down one line (in multi-row input only)",
+      "  g        move cursor to the first line (in multi-row input only)",
+      "  G        move cursor to the last line (in multi-row input only)",
       "  i        change mode to insert",
       "  a        move cursor one character to the right and change mode to "
       "insert",
@@ -60,10 +64,12 @@ void Help::show() {
       "insert",
       "  A        move cursor to the end of the line and change mode to insert",
       "  S        delete everything on the line and change mode to insert",
+      "  d        delete line under cursor (in multi-row input only)",
       "",
       "  Insert mode:",
       "  Esc                change mode to normal",
-      "  Enter              submit and close the input field",
+      "  Enter              submit and close the input field (or add a new "
+      "line in multi-row input)",
       "  Backspace/Delete   delete the character before the cursor",
       "  (Any other key is inserted before the cursor)",
   };
