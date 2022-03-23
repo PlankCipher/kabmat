@@ -2,7 +2,7 @@
 #include "../../../helpers/consts.h"
 #include "../../helpers/win_fit_text/win_fit_text.h"
 
-CardWin::CardWin(int height, int width, string *content) {
+CardWin::CardWin(int height, int width, Card *card) {
   this->height = height;
   this->width = width;
   this->start_y = 0;
@@ -12,7 +12,7 @@ CardWin::CardWin(int height, int width, string *content) {
       newwin(this->height, this->width, this->start_y, this->start_x);
   refresh();
 
-  this->content = content;
+  this->card = card;
 }
 
 void CardWin::show(int start_y, int start_x) {
@@ -23,7 +23,7 @@ void CardWin::show(int start_y, int start_x) {
 
   box(this->window, 0, 0);
 
-  string shown_content = win_fit_text(this->window, *this->content);
+  string shown_content = win_fit_text(this->window, this->card->content);
   mvwprintw(this->window, 1, 1, "%s", shown_content.c_str());
 }
 

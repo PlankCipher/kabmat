@@ -3,11 +3,13 @@
 #include <ncurses.h>
 #include <string>
 
+#include "../../../DataManager/Card.h"
+
 using namespace std;
 
 class CardWin {
 public:
-  CardWin(int height, int width, string *content);
+  CardWin(int height, int width, Card *card);
 
   void show(int start_y, int start_x);
   void focus();
@@ -20,5 +22,5 @@ public:
   WINDOW *window;
 
 private:
-  string *content;
+  Card *card;
 };

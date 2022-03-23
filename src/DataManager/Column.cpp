@@ -8,11 +8,11 @@ Column::Column(string title) {
   this->cards = {};
 }
 
-void Column::add_card(string content, bool put_at_bottom) {
+void Column::add_card(Card card, bool put_at_bottom) {
   if (put_at_bottom)
-    this->cards.push_back(remove_trim_spaces(content));
+    this->cards.push_back(card);
   else
-    this->cards.insert(this->cards.begin(), remove_trim_spaces(content));
+    this->cards.insert(this->cards.begin(), card);
 }
 
 void Column::delete_card(size_t card_index) {
