@@ -13,6 +13,7 @@ public:
         string title = "", bool focused = false);
 
   void show(bool grab_input = false);
+  void clean_up();
 
   void focus();
   void unfocus();
@@ -26,6 +27,7 @@ public:
   int start_y;
   int start_x;
   WINDOW *window;
+  int mode;
 
 private:
   void draw_content(vector<string> shown_content, WINDOW *scrollable_window);
@@ -51,7 +53,6 @@ private:
 
   bool focused;
 
-  int mode;
   bool multi_row;
   string title;
 

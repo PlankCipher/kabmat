@@ -83,11 +83,14 @@ void Input::show(bool grab_input) {
       done = this->handle_key_press(key);
     }
 
-    // clean up
-    curs_set(0);
-    werase(this->window);
-    wrefresh(this->window);
+    this->clean_up();
   }
+}
+
+void Input::clean_up() {
+  curs_set(0);
+  werase(this->window);
+  wrefresh(this->window);
 }
 
 string Input::get_value() {
@@ -97,7 +100,8 @@ string Input::get_value() {
     for (size_t i = 0; i < this->content.size(); ++i) {
       content += this->content[i];
 
-      if (this->content[i].length() < (size_t)this->width - 2)
+      if (this->content[i].length() < (size_t)this->width - 2 &&
+          i < this->content.size() - 1)
         content += '\n';
     }
   } else {
@@ -112,17 +116,16 @@ void Input::draw_content(vector<string> shown_content,
                          [[maybe_unused]] WINDOW *scrollable_window) {
   werase(this->window);
 
-  if (this->focused)
-    this->focus();
-  else
-    this->unfocus();
-
   if (shown_content.size() > 0) {
     for (size_t i = 0; i < shown_content.size(); ++i)
       mvwprintw(this->window, i + 1, 1, "%s", shown_content[i].c_str());
   }
 
-  wmove(this->window, this->cursor_y, this->cursor_x);
+  if (this->focused)
+    this->focus();
+  else
+    this->unfocus();
+
   wrefresh(this->window);
 }
 
@@ -153,6 +156,9 @@ void Input::focus() {
   wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
 
   mvwprintw(this->window, 0, 1, "%s", this->title.c_str());
+  wmove(this->window, this->cursor_y, this->cursor_x);
+
+  wrefresh(this->window);
 
   this->focused = true;
 }
@@ -160,6 +166,9 @@ void Input::focus() {
 void Input::unfocus() {
   box(this->window, 0, 0);
   mvwprintw(this->window, 0, 1, "%s", this->title.c_str());
+  wrefresh(this->window);
+
+  this->change_mode(MODE_NORMAL);
 
   this->focused = false;
 }
@@ -551,8 +560,10 @@ void Input::move_cursor_left() {
     this->cursor_x = 1;
     if (!this->multi_row)
       this->first_line_window.scroll_up();
-  } else
+  } else {
     wmove(this->window, this->cursor_y, this->cursor_x);
+    wrefresh(this->window);
+  }
 }
 
 void Input::move_cursor_right() {
@@ -571,8 +582,10 @@ void Input::move_cursor_right() {
       this->cursor_x = this->first_line_window.max_items_in_win + 1;
       if (!this->multi_row)
         this->first_line_window.scroll_down();
-    } else
+    } else {
       wmove(this->window, this->cursor_y, this->cursor_x);
+      wrefresh(this->window);
+    }
   }
 }
 
@@ -586,6 +599,7 @@ void Input::move_cursor_up() {
                              (size_t)this->cursor_x),
                          (size_t)1);
     wmove(this->window, this->cursor_y, this->cursor_x);
+    wrefresh(this->window);
   }
 }
 
@@ -602,12 +616,14 @@ void Input::move_cursor_down() {
                              (size_t)this->cursor_x),
                          (size_t)1);
     wmove(this->window, this->cursor_y, this->cursor_x);
+    wrefresh(this->window);
   }
 }
 
 void Input::move_cursor_to_first_char() {
   this->cursor_x = 1;
   wmove(this->window, this->cursor_y, this->cursor_x);
+  wrefresh(this->window);
 
   if (!this->multi_row)
     this->first_line_window.scroll_to_top();
@@ -621,6 +637,7 @@ void Input::move_cursor_to_last_char() {
                                (this->mode == MODE_INSERT ? 1 : 0),
                            (size_t)1);
       wmove(this->window, this->cursor_y, this->cursor_x);
+      wrefresh(this->window);
     } else {
       this->cursor_x =
           min(this->first_line_size + 1,
@@ -662,6 +679,7 @@ void Input::change_mode(int mode) {
 
   wmove(this->window, this->cursor_y, this->cursor_x);
   refresh();
+  wrefresh(this->window);
 }
 
 size_t Input::curr_line_index() {

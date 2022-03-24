@@ -72,6 +72,14 @@ void Help::show() {
       "line in multi-row input)",
       "  Backspace/Delete   delete the character before the cursor",
       "  (Any other key is inserted before the cursor)",
+      "",
+      "",
+      "Card Info Window keybindings",
+      "Esc, q   cancel and close",
+      "Enter    submit and close",
+      "TAB      switch focused input (content or description)",
+      "c        open checklist items window",
+      "(Any other key gets handled by the focused input)",
   };
   size_t message_lines_count = message_lines.size();
 
