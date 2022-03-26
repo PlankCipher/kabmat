@@ -91,6 +91,7 @@ void Input::clean_up() {
   curs_set(0);
   werase(this->window);
   wrefresh(this->window);
+  this->change_mode(MODE_NORMAL);
 }
 
 string Input::get_value() {
