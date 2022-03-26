@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "../../components/CardInfo/CardInfo.h"
 #include "../../components/Footer/Footer.h"
 #include "../../components/Header/Header.h"
 #include "../../components/Help/Help.h"
@@ -355,8 +356,7 @@ bool BoardScreen::handle_key_press(char key) {
 
     break;
   }
-  case 'E':
-  case 'r': {
+  case 'E': {
     // edit title of highlighted column
     if (this->columns_count > 0) {
       size_t col_to_rename_index =
@@ -400,6 +400,79 @@ bool BoardScreen::handle_key_press(char key) {
 
     break;
   }
+  case 'c': {
+    // create card
+    Card card = Card("");
+    bool canceled = this->create_card_info_window(&card);
+
+    if (!canceled && card.content != "") {
+      Column *column =
+          this->columns[this->columns_window.window_start -
+                        this->columns.begin() + this->focused_index]
+              .column;
+      this->data_manager->add_card(column, card);
+
+      this->setup_columns();
+
+      // highlight the just created card
+      vector<ColumnWin> shown_columns =
+          this->columns_window.get_current_window();
+      shown_columns[this->focused_index].focus_last();
+      *(this->columns_window.window_start + this->focused_index) =
+          shown_columns[this->focused_index];
+
+      this->columns_window.draw();
+    }
+
+    break;
+  }
+  case 'e': {
+    // edit card
+    if (this->columns_count > 0) {
+      size_t focused_col_index = this->columns_window.window_start -
+                                 this->columns.begin() + this->focused_index;
+      Column *column = this->columns[focused_col_index].column;
+
+      if (column->cards.size() > 0) {
+        size_t focused_card_index =
+            this->columns[focused_col_index].get_absolute_focused_index();
+
+        Card card = column->cards[focused_card_index];
+
+        bool canceled = this->create_card_info_window(&card);
+
+        if (!canceled && card.content != "") {
+          this->data_manager->update_card(column, focused_card_index, card);
+
+          this->setup_columns();
+
+          this->columns_window.draw();
+        }
+      }
+    }
+
+    break;
+  }
+  case 'd': {
+    // delete card
+    if (this->columns_count > 0) {
+      size_t focused_col_index = this->columns_window.window_start -
+                                 this->columns.begin() + this->focused_index;
+      Column *column = this->columns[focused_col_index].column;
+
+      if (column->cards.size() > 0) {
+        size_t focused_card_index =
+            this->columns[focused_col_index].get_absolute_focused_index();
+
+        this->data_manager->delete_card(column, focused_card_index);
+
+        this->setup_columns();
+        this->columns_window.draw();
+      }
+    }
+
+    break;
+  }
   }
 
   return false;
@@ -423,4 +496,18 @@ string BoardScreen::create_input_window(string title, string content,
   this->columns_window.draw();
 
   return input;
+}
+
+bool BoardScreen::create_card_info_window(Card *card) {
+  int height = this->height * 0.4;
+  int width = this->width * 0.5;
+  int start_y = (this->height / 2) - (height / 2);
+  int start_x = (this->width / 2) - (width / 2);
+
+  CardInfo card_info_window = CardInfo(height, width, start_y, start_x, card);
+  bool canceled = card_info_window.show();
+
+  this->columns_window.draw();
+
+  return canceled;
 }

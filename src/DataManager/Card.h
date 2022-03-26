@@ -15,6 +15,6 @@ public:
   Card(string content);
 
   string content;
-  vector<string> description;
+  string description;
   vector<ChecklistItem> checklist;
 };

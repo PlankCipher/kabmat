@@ -27,8 +27,8 @@ DataManager::DataManager() {
         } else
           // since we are parsing the data progressively, the card
           // to which this description belongs is the last card we have
-          this->boards.back().columns.back().cards.back().description.push_back(
-              remove_trim_spaces(line));
+          this->boards.back().columns.back().cards.back().description +=
+              remove_trim_spaces(line) + "\n";
       } else if (line.find("  ") == 0) {
         if (!reading_column) {
           fprintf(stderr, "ERROR: incorrect syntax in data file \"%s\"\n",
@@ -64,6 +64,19 @@ DataManager::DataManager() {
       }
 
       line_count++;
+    }
+
+    // sure, let's spin up some loops for a quick and dirty
+    // way to remove extra newlines at the end of descriptions
+    // of cards because i am too lazy to think of something else
+    for (size_t i = 0; i < this->boards.size(); ++i) {
+      for (size_t j = 0; j < this->boards[i].columns.size(); ++j) {
+        for (size_t k = 0; k < this->boards[i].columns[j].cards.size(); ++k) {
+          Card *card = &this->boards[i].columns[j].cards[k];
+          if (card->description.length() > 0)
+            card->description.erase(card->description.end() - 1);
+        }
+      }
     }
 
     data_file.close();
@@ -145,6 +158,21 @@ void DataManager::delete_column(Board *board, size_t column_index) {
   this->write_data_to_file();
 }
 
+void DataManager::add_card(Column *column, Card card) {
+  column->add_card(card);
+  this->write_data_to_file();
+}
+
+void DataManager::update_card(Column *column, size_t card_index, Card card) {
+  column->update_card(card_index, card);
+  this->write_data_to_file();
+}
+
+void DataManager::delete_card(Column *column, size_t card_index) {
+  column->delete_card(card_index);
+  this->write_data_to_file();
+}
+
 bool DataManager::move_column_left(Board *board, size_t column_index) {
   bool moved = board->move_column_left(column_index);
   if (moved)
@@ -213,8 +241,13 @@ void DataManager::write_data_to_file() {
 
           data_file << "  " << curr_card.content << '\n';
 
-          for (size_t l = 0; l < curr_card.description.size(); ++l)
-            data_file << "    " << curr_card.description[l] << '\n';
+          for (size_t i = 0; i < curr_card.description.length(); ++i)
+            if (curr_card.description[i] == '\n')
+              curr_card.description.insert(
+                  curr_card.description.begin() + i + 1, 4, ' ');
+
+          if (curr_card.description.length() > 0)
+            data_file << "    " << curr_card.description << '\n';
         }
       }
     }

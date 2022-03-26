@@ -16,6 +16,10 @@ public:
   void rename_column(Board *board, size_t column_index, string new_title);
   void delete_column(Board *board, size_t column_index);
 
+  void add_card(Column *column, Card card);
+  void update_card(Column *column, size_t card_index, Card card);
+  void delete_card(Column *column, size_t card_index);
+
   bool move_column_left(Board *board, size_t column_index);
   bool move_column_right(Board *board, size_t column_index);
 

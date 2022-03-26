@@ -4,6 +4,6 @@
 
 Card::Card(string content) {
   this->content = remove_trim_spaces(content);
-  this->description = {};
+  this->description = "";
   this->checklist = {};
 }

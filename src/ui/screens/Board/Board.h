@@ -26,6 +26,7 @@ private:
   void setup_columns();
   string create_input_window(string title, string content = "",
                              bool focused = false);
+  bool create_card_info_window(Card *card);
 
   Board *board;
   DataManager *data_manager;

@@ -15,6 +15,10 @@ void Column::add_card(Card card, bool put_at_bottom) {
     this->cards.insert(this->cards.begin(), card);
 }
 
+void Column::update_card(size_t card_index, Card card) {
+  this->cards[card_index] = card;
+}
+
 void Column::delete_card(size_t card_index) {
   this->cards.erase(this->cards.begin() + card_index);
 }

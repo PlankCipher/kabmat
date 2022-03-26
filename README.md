@@ -13,7 +13,7 @@ $ make install
 ## Usage
 
 ```
-kabmat 2.3.0
+kabmat 2.4.0
 TUI program for managing kanban boards with vim-like keybindings
 
 Usage: kabmat [OPTION]...
