@@ -402,26 +402,28 @@ bool BoardScreen::handle_key_press(char key) {
   }
   case 'c': {
     // create card
-    Card card = Card("");
-    bool canceled = this->create_card_info_window(&card);
+    if (this->columns_count > 0) {
+      Card card = Card("");
+      bool canceled = this->create_card_info_window(&card);
 
-    if (!canceled && card.content != "") {
-      Column *column =
-          this->columns[this->columns_window.window_start -
-                        this->columns.begin() + this->focused_index]
-              .column;
-      this->data_manager->add_card(column, card);
+      if (!canceled && card.content != "") {
+        Column *column =
+            this->columns[this->columns_window.window_start -
+                          this->columns.begin() + this->focused_index]
+                .column;
+        this->data_manager->add_card(column, card);
 
-      this->setup_columns();
+        this->setup_columns();
 
-      // highlight the just created card
-      vector<ColumnWin> shown_columns =
-          this->columns_window.get_current_window();
-      shown_columns[this->focused_index].focus_last();
-      *(this->columns_window.window_start + this->focused_index) =
-          shown_columns[this->focused_index];
+        // highlight the just created card
+        vector<ColumnWin> shown_columns =
+            this->columns_window.get_current_window();
+        shown_columns[this->focused_index].focus_last();
+        *(this->columns_window.window_start + this->focused_index) =
+            shown_columns[this->focused_index];
 
-      this->columns_window.draw();
+        this->columns_window.draw();
+      }
     }
 
     break;
