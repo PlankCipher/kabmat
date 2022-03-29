@@ -45,7 +45,6 @@ bool CardInfo::show() {
   bool canceled = false;
   while (!done && (key = wgetch(this->window))) {
     switch (key) {
-    case 27: // Escape
     case 'q':
       // cancel and close if in normal mode
       if (this->focused_input->mode == MODE_NORMAL) {

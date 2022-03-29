@@ -27,6 +27,7 @@ private:
   string create_input_window(string title, string content = "",
                              bool focused = false);
   bool create_card_info_window(Card *card);
+  bool create_confirm_dialog(string message);
 
   Board *board;
   DataManager *data_manager;

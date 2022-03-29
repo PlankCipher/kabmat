@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "../../../helpers/consts.h"
+#include "../../components/ConfirmDialog/ConfirmDialog.h"
 #include "../../components/Footer/Footer.h"
 #include "../../components/Help/Help.h"
 #include "../../components/Input/Input.h"
@@ -156,14 +157,31 @@ void MainMenu::handle_key_press(char key) {
     if (this->boards_count > 0) {
       string board_to_delete =
           *(this->menu_window.window_start + this->highlighted_index);
-      this->data_manager->delete_board(board_to_delete);
 
-      this->boards_names = data_manager->get_boards_names();
-      this->boards_count = this->boards_names.size();
+      string message_board_name = board_to_delete.length() > 11
+                                      ? board_to_delete.substr(0, 9) + ".."
+                                      : board_to_delete;
+      string message = "Delete board \"" + message_board_name + "\"?";
+      int height = 5;
+      int width = message.length() + 4;
+      int start_y = (getmaxy(stdscr) / 2) - (height / 2);
+      int start_x = (getmaxx(stdscr) / 2) - (width / 2);
 
-      this->highlighted_index =
-          min((size_t)this->highlighted_index, this->boards_count - 1);
-      this->menu_window.scroll_to_top();
+      ConfirmDialog confirm_dialog(height, width, start_y, start_x, message);
+      bool confirmed = confirm_dialog.show();
+
+      this->setup_window();
+
+      if (confirmed) {
+        this->data_manager->delete_board(board_to_delete);
+
+        this->boards_names = data_manager->get_boards_names();
+        this->boards_count = this->boards_names.size();
+
+        this->highlighted_index =
+            min((size_t)this->highlighted_index, this->boards_count - 1);
+        this->menu_window.scroll_to_top();
+      }
     }
 
     break;

@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "../../components/CardInfo/CardInfo.h"
+#include "../../components/ConfirmDialog/ConfirmDialog.h"
 #include "../../components/Footer/Footer.h"
 #include "../../components/Header/Header.h"
 #include "../../components/Help/Help.h"
@@ -381,21 +382,31 @@ bool BoardScreen::handle_key_press(char key) {
       size_t col_to_del_index =
           (this->columns_window.window_start - this->columns.begin()) +
           this->focused_index;
-      this->data_manager->delete_column(this->board, col_to_del_index);
+      string col_to_del_title = this->columns[col_to_del_index].column->title;
 
-      this->columns = {};
-      for (size_t i = 0; i < this->board->columns.size(); ++i) {
-        // -4 because of 2 spaces between
-        // each pair of shown columns
-        int width = (this->width - 4) / 3;
-        this->columns.push_back(ColumnWin(this->height, width, this->start_y,
-                                          &this->board->columns[i]));
+      string message_col_title = col_to_del_title.length() > 11
+                                     ? col_to_del_title.substr(0, 9) + ".."
+                                     : col_to_del_title;
+      string message = "Delete column \"" + message_col_title + "\"?";
+      bool confirmed = this->create_confirm_dialog(message);
+
+      if (confirmed) {
+        this->data_manager->delete_column(this->board, col_to_del_index);
+
+        this->columns = {};
+        for (size_t i = 0; i < this->board->columns.size(); ++i) {
+          // -4 because of 2 spaces between
+          // each pair of shown columns
+          int width = (this->width - 4) / 3;
+          this->columns.push_back(ColumnWin(this->height, width, this->start_y,
+                                            &this->board->columns[i]));
+        }
+        this->columns_count = this->columns.size();
+
+        this->focused_index =
+            min((size_t)this->focused_index, this->columns_count - 1);
+        this->columns_window.scroll_to_top();
       }
-      this->columns_count = this->columns.size();
-
-      this->focused_index =
-          min((size_t)this->focused_index, this->columns_count - 1);
-      this->columns_window.scroll_to_top();
     }
 
     break;
@@ -463,13 +474,25 @@ bool BoardScreen::handle_key_press(char key) {
       Column *column = this->columns[focused_col_index].column;
 
       if (column->cards.size() > 0) {
-        size_t focused_card_index =
+        size_t card_to_del_index =
             this->columns[focused_col_index].get_absolute_focused_index();
+        string card_to_del_content = this->columns[focused_col_index]
+                                         .column->cards[card_to_del_index]
+                                         .content;
 
-        this->data_manager->delete_card(column, focused_card_index);
+        string message_card_content =
+            card_to_del_content.length() > 11
+                ? card_to_del_content.substr(0, 9) + ".."
+                : card_to_del_content;
+        string message = "Delete card \"" + message_card_content + "\"?";
+        bool confirmed = this->create_confirm_dialog(message);
 
-        this->setup_columns();
-        this->columns_window.draw();
+        if (confirmed) {
+          this->data_manager->delete_card(column, card_to_del_index);
+
+          this->setup_columns();
+          this->columns_window.draw();
+        }
       }
     }
 
@@ -512,4 +535,18 @@ bool BoardScreen::create_card_info_window(Card *card) {
   this->columns_window.draw();
 
   return canceled;
+}
+
+bool BoardScreen::create_confirm_dialog(string message) {
+  int height = 5;
+  int width = message.length() + 4;
+  int start_y = (getmaxy(stdscr) / 2) - (height / 2);
+  int start_x = (getmaxx(stdscr) / 2) - (width / 2);
+
+  ConfirmDialog confirm_dialog(height, width, start_y, start_x, message);
+  bool confirmed = confirm_dialog.show();
+
+  this->columns_window.draw();
+
+  return confirmed;
 }

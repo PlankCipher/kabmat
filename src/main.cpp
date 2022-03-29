@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
     init_pair(COLOR_PAIR_MODE, COLOR_BLACK, COLOR_BLUE);
     init_pair(COLOR_PAIR_HEADER, COLOR_BLACK, COLOR_WHITE);
     init_pair(COLOR_PAIR_BORDER, COLOR_WHITE, -1);
+    init_pair(COLOR_PAIR_KEY_HINT, COLOR_WHITE, -1);
 
     if (config.default_board == "") {
       MainMenu main_menu(&data_manager, &config);
