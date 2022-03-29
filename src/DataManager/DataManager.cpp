@@ -24,11 +24,13 @@ DataManager::DataManager() {
           fprintf(stderr, "[line %zu] reading a description without a card\n",
                   line_count);
           exit(1);
-        } else
+        } else {
           // since we are parsing the data progressively, the card
           // to which this description belongs is the last card we have
+          line.erase(line.begin(), line.begin() + 4);
           this->boards.back().columns.back().cards.back().description +=
-              remove_trim_spaces(line) + "\n";
+              line + "\n";
+        }
       } else if (line.find("  ") == 0) {
         if (!reading_column) {
           fprintf(stderr, "ERROR: incorrect syntax in data file \"%s\"\n",
