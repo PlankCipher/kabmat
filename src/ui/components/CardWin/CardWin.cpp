@@ -44,8 +44,8 @@ void CardWin::focus() {
         "[" + to_string(done_count) + "/" + to_string(total) + "]";
 
     wattron(this->window, COLOR_PAIR(COLOR_PAIR_FOOTER));
-    mvwprintw(this->window, 0, this->width - 7, "%s",
-              checklist_overview.c_str());
+    mvwprintw(this->window, 0, this->width - checklist_overview.length() - 2,
+              "%s", checklist_overview.c_str());
     wattroff(this->window, COLOR_PAIR(COLOR_PAIR_FOOTER));
   }
 
@@ -65,8 +65,8 @@ void CardWin::unfocus() {
 
     string checklist_overview =
         "[" + to_string(done_count) + "/" + to_string(total) + "]";
-    mvwprintw(this->window, 0, this->width - 7, "%s",
-              checklist_overview.c_str());
+    mvwprintw(this->window, 0, this->width - checklist_overview.length() - 2,
+              "%s", checklist_overview.c_str());
   }
 
   wrefresh(this->window);
