@@ -116,39 +116,47 @@ void MainMenu::handle_key_press(char key) {
   }
   case 'k': {
     // move up
-    if (--this->highlighted_index == -1) {
-      this->highlighted_index = 0;
-      this->menu_window.scroll_up();
-    } else
-      this->highlight_current();
-
+    if (this->boards_count > 0) {
+      if (--this->highlighted_index == -1) {
+        this->highlighted_index = 0;
+        this->menu_window.scroll_up();
+      } else
+        this->highlight_current();
+    }
     break;
   }
   case 'j': {
     // move down
-    this->highlighted_index =
-        min(this->boards_count - 1, (size_t)this->highlighted_index + 1);
+    if (this->boards_count > 0) {
+      this->highlighted_index =
+          min(this->boards_count - 1, (size_t)this->highlighted_index + 1);
 
-    if (this->highlighted_index == this->menu_window.max_items_in_win) {
-      this->highlighted_index = this->menu_window.max_items_in_win - 1;
-      this->menu_window.scroll_down();
-    } else
-      this->highlight_current();
+      if (this->highlighted_index == this->menu_window.max_items_in_win) {
+        this->highlighted_index = this->menu_window.max_items_in_win - 1;
+        this->menu_window.scroll_down();
+      } else
+        this->highlight_current();
+    }
 
     break;
   }
   case 'g': {
     // go to first board
-    this->highlighted_index = 0;
-    this->menu_window.scroll_to_top();
+    if (this->boards_count > 0) {
+      this->highlighted_index = 0;
+      this->menu_window.scroll_to_top();
+    }
 
     break;
   }
   case 'G': {
     // go to last board
-    this->highlighted_index = min(
-        (size_t)this->menu_window.max_items_in_win - 1, this->boards_count - 1);
-    this->menu_window.scroll_to_bottom();
+    if (this->boards_count > 0) {
+      this->highlighted_index =
+          min((size_t)this->menu_window.max_items_in_win - 1,
+              this->boards_count - 1);
+      this->menu_window.scroll_to_bottom();
+    }
 
     break;
   }
