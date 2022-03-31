@@ -14,6 +14,8 @@ class Card {
 public:
   Card(string content);
 
+  void add_checklist_item(ChecklistItem item);
+
   string content;
   string description;
   vector<ChecklistItem> checklist;

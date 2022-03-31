@@ -7,3 +7,7 @@ Card::Card(string content) {
   this->description = "";
   this->checklist = {};
 }
+
+void Card::add_checklist_item(ChecklistItem item) {
+  this->checklist.push_back(item);
+}

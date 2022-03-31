@@ -31,6 +31,27 @@ DataManager::DataManager() {
           this->boards.back().columns.back().cards.back().description +=
               line + "\n";
         }
+      } else if (line.find("   ") == 0) {
+        if (!reading_card) {
+          fprintf(stderr, "ERROR: incorrect syntax in data file \"%s\"\n",
+                  DATA_FILE.c_str());
+          fprintf(stderr,
+                  "[line %zu] reading a checklist item without a card\n",
+                  line_count);
+          exit(1);
+        } else {
+          // since we are parsing the data progressively, the card
+          // to which this checklist item belongs is the last card we have
+          line = remove_trim_spaces(line);
+
+          ChecklistItem checklist_item;
+          checklist_item.done = line[0] == '+';
+          line.erase(line.begin(), line.begin() + 1);
+          checklist_item.content = line;
+
+          this->boards.back().columns.back().cards.back().add_checklist_item(
+              checklist_item);
+        }
       } else if (line.find("  ") == 0) {
         if (!reading_column) {
           fprintf(stderr, "ERROR: incorrect syntax in data file \"%s\"\n",
@@ -243,10 +264,14 @@ void DataManager::write_data_to_file() {
 
           data_file << "  " << curr_card.content << '\n';
 
-          for (size_t i = 0; i < curr_card.description.length(); ++i)
-            if (curr_card.description[i] == '\n')
+          for (size_t l = 0; l < curr_card.checklist.size(); ++l)
+            data_file << "   " << (curr_card.checklist[l].done ? '+' : '-')
+                      << curr_card.checklist[l].content << '\n';
+
+          for (size_t l = 0; l < curr_card.description.length(); ++l)
+            if (curr_card.description[l] == '\n')
               curr_card.description.insert(
-                  curr_card.description.begin() + i + 1, 4, ' ');
+                  curr_card.description.begin() + l + 1, 4, ' ');
 
           if (curr_card.description.length() > 0)
             data_file << "    " << curr_card.description << '\n';
