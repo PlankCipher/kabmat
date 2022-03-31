@@ -109,6 +109,20 @@ void Help::show() {
       "<TAB>     switch focused input (content or description)",
       "c         open checklist items window",
       "(Any other key gets handled by the focused input)",
+      "",
+      "",
+      "Checklist Window keybindings:",
+      "q         close the window",
+      "k         highlight the item above",
+      "j         highlight the item below",
+      "g         highlight the first item",
+      "G         highlight the last item",
+      "K         move highlighted item up",
+      "J         move highlighted item down",
+      "c         add a new item to the list",
+      "e         edit content of highlighted item",
+      "<SPACE>   toggle highlighted item (done/not done)",
+      "d         delete highlighted item",
   };
   size_t message_lines_count = message_lines.size();
 

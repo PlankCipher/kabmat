@@ -165,6 +165,23 @@ void DataManager::delete_board(string name) {
   this->write_data_to_file();
 }
 
+Board *DataManager::get_board_if_exists(string name) {
+  for (size_t i = 0; i < this->boards.size(); ++i)
+    if (this->boards[i].name == name)
+      return &this->boards[i];
+
+  fprintf(stderr, "ERROR: No board named \"%s\" was found\n", name.c_str());
+  exit(1);
+}
+
+vector<string> DataManager::get_boards_names() {
+  vector<string> boards_names;
+  for (size_t i = 0; i < this->boards.size(); ++i)
+    boards_names.push_back(this->boards[i].name);
+
+  return boards_names;
+}
+
 void DataManager::create_column(Board *board, string title) {
   board->add_column(title);
   this->write_data_to_file();
@@ -181,6 +198,20 @@ void DataManager::delete_column(Board *board, size_t column_index) {
   this->write_data_to_file();
 }
 
+bool DataManager::move_column_left(Board *board, size_t column_index) {
+  bool moved = board->move_column_left(column_index);
+  if (moved)
+    this->write_data_to_file();
+  return moved;
+}
+
+bool DataManager::move_column_right(Board *board, size_t column_index) {
+  bool moved = board->move_column_right(column_index);
+  if (moved)
+    this->write_data_to_file();
+  return moved;
+}
+
 void DataManager::add_card(Column *column, Card card) {
   column->add_card(card);
   this->write_data_to_file();
@@ -194,20 +225,6 @@ void DataManager::update_card(Column *column, size_t card_index, Card card) {
 void DataManager::delete_card(Column *column, size_t card_index) {
   column->delete_card(card_index);
   this->write_data_to_file();
-}
-
-bool DataManager::move_column_left(Board *board, size_t column_index) {
-  bool moved = board->move_column_left(column_index);
-  if (moved)
-    this->write_data_to_file();
-  return moved;
-}
-
-bool DataManager::move_column_right(Board *board, size_t column_index) {
-  bool moved = board->move_column_right(column_index);
-  if (moved)
-    this->write_data_to_file();
-  return moved;
 }
 
 bool DataManager::move_card_up(Column *column, size_t card_index) {
@@ -239,6 +256,36 @@ bool DataManager::move_card_to_next_column(Board *board, size_t card_index,
                                            Config *config) {
   bool moved = board->move_card_to_next_column(card_index, src_index,
                                                dist_index, config);
+  if (moved)
+    this->write_data_to_file();
+  return moved;
+}
+
+void DataManager::add_checklist_item(Card *card, ChecklistItem item) {
+  card->add_checklist_item(item);
+  this->write_data_to_file();
+}
+
+void DataManager::update_checklist_item(Card *card, size_t item_index,
+                                        ChecklistItem item) {
+  card->update_checklist_item(item_index, item);
+  this->write_data_to_file();
+}
+
+void DataManager::delete_checklist_item(Card *card, size_t item_index) {
+  card->delete_checklist_item(item_index);
+  this->write_data_to_file();
+}
+
+bool DataManager::move_checklist_item_up(Card *card, size_t item_index) {
+  bool moved = card->move_checklist_item_up(item_index);
+  if (moved)
+    this->write_data_to_file();
+  return moved;
+}
+
+bool DataManager::move_checklist_item_down(Card *card, size_t item_index) {
+  bool moved = card->move_checklist_item_down(item_index);
   if (moved)
     this->write_data_to_file();
   return moved;
@@ -285,21 +332,4 @@ void DataManager::write_data_to_file() {
             DATA_FILE.c_str());
     exit(1);
   }
-}
-
-Board *DataManager::get_board_if_exists(string name) {
-  for (size_t i = 0; i < this->boards.size(); ++i)
-    if (this->boards[i].name == name)
-      return &this->boards[i];
-
-  fprintf(stderr, "ERROR: No board named \"%s\" was found\n", name.c_str());
-  exit(1);
-}
-
-vector<string> DataManager::get_boards_names() {
-  vector<string> boards_names;
-  for (size_t i = 0; i < this->boards.size(); ++i)
-    boards_names.push_back(this->boards[i].name);
-
-  return boards_names;
 }

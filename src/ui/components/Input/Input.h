@@ -12,7 +12,7 @@ public:
   Input(int height, int width, int start_y, int start_x, string content = "",
         string title = "", bool focused = false);
 
-  void show(bool grab_input = false);
+  void show(bool grab_input = false, bool just_redraw = false);
   void clean_up();
 
   void focus();

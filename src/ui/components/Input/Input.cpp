@@ -67,14 +67,21 @@ Input::Input(int height, int width, int start_y, int start_x, string content,
   this->mode = MODE_NORMAL;
 }
 
-void Input::show(bool grab_input) {
+void Input::show(bool grab_input, bool just_redraw) {
   // show cursor
   curs_set(1);
 
-  if (this->multi_row)
-    this->content_window.scroll_to_top();
-  else
-    this->first_line_window.scroll_to_top();
+  if (this->multi_row) {
+    if (just_redraw)
+      this->content_window.draw();
+    else
+      this->content_window.scroll_to_top();
+  } else {
+    if (just_redraw)
+      this->first_line_window.draw();
+    else
+      this->first_line_window.scroll_to_top();
+  }
 
   if (grab_input) {
     char key;

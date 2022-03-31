@@ -450,12 +450,12 @@ bool BoardScreen::handle_key_press(char key) {
         size_t focused_card_index =
             this->columns[focused_col_index].get_absolute_focused_index();
 
-        Card card = column->cards[focused_card_index];
+        Card *card = &(column->cards[focused_card_index]);
 
-        bool canceled = this->create_card_info_window(&card);
+        bool canceled = this->create_card_info_window(card);
 
-        if (!canceled && card.content != "") {
-          this->data_manager->update_card(column, focused_card_index, card);
+        if (!canceled && card->content != "") {
+          this->data_manager->update_card(column, focused_card_index, *card);
 
           this->setup_columns();
 
@@ -530,7 +530,7 @@ bool BoardScreen::create_card_info_window(Card *card) {
   int start_x = (this->width / 2) - (width / 2);
 
   CardInfo card_info_window = CardInfo(height, width, start_y, start_x, card);
-  bool canceled = card_info_window.show();
+  bool canceled = card_info_window.show(this->data_manager);
 
   this->columns_window.draw();
 

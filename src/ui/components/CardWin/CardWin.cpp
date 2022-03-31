@@ -31,10 +31,43 @@ void CardWin::focus() {
   wattron(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
   box(this->window, 0, 0);
   wattroff(this->window, COLOR_PAIR(COLOR_PAIR_BORDER));
+
+  // [x/y] on the right
+  if (this->card->checklist.size() > 0) {
+    size_t done_count = 0;
+    size_t total = this->card->checklist.size();
+
+    for (size_t i = 0; i < total; ++i)
+      done_count += this->card->checklist[i].done;
+
+    string checklist_overview =
+        "[" + to_string(done_count) + "/" + to_string(total) + "]";
+
+    wattron(this->window, COLOR_PAIR(COLOR_PAIR_FOOTER));
+    mvwprintw(this->window, 0, this->width - 7, "%s",
+              checklist_overview.c_str());
+    wattroff(this->window, COLOR_PAIR(COLOR_PAIR_FOOTER));
+  }
+
   wrefresh(this->window);
 }
 
 void CardWin::unfocus() {
   box(this->window, 0, 0);
+
+  // [x/y] on the right
+  if (this->card->checklist.size() > 0) {
+    size_t done_count = 0;
+    size_t total = this->card->checklist.size();
+
+    for (size_t i = 0; i < total; ++i)
+      done_count += this->card->checklist[i].done;
+
+    string checklist_overview =
+        "[" + to_string(done_count) + "/" + to_string(total) + "]";
+    mvwprintw(this->window, 0, this->width - 7, "%s",
+              checklist_overview.c_str());
+  }
+
   wrefresh(this->window);
 }
