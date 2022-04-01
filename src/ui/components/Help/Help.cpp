@@ -106,7 +106,7 @@ void Help::show() {
       "Card Info Window keybindings:",
       "q         cancel and close (if in normal mode)",
       "<Enter>   submit and close (if in normal mode)",
-      "<TAB>     switch focused input (content or description)",
+      "<Tab>     switch focused input (content or description)",
       "c         open checklist items window",
       "(Any other key gets handled by the focused input)",
       "",
@@ -121,7 +121,7 @@ void Help::show() {
       "J         move highlighted item down",
       "c         add a new item to the list",
       "e         edit content of highlighted item",
-      "<SPACE>   toggle highlighted item (done/not done)",
+      "<Space>   toggle highlighted item (done/not done)",
       "d         delete highlighted item",
   };
   size_t message_lines_count = message_lines.size();
