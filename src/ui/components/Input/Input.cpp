@@ -318,6 +318,12 @@ bool Input::normal_mode_key_handler(char key) {
       this->line_has_newline.erase(this->line_has_newline.begin() +
                                    this->curr_line_index());
 
+      if (this->content_size == 0) {
+        this->content.push_back("");
+        this->content_size++;
+        this->line_has_newline.push_back(true);
+      }
+
       this->cursor_y =
           max(min((size_t)this->cursor_y, this->content_size), (size_t)1);
       this->cursor_x =
