@@ -1,5 +1,5 @@
 #include "Board.h"
-#include "../helpers/remove_trim_spaces/remove_trim_spaces.h"
+#include "../helpers/trim_spaces/trim_spaces.h"
 
 Board::Board(string name) {
   this->name = name;
@@ -7,12 +7,12 @@ Board::Board(string name) {
 }
 
 void Board::add_column(string title) {
-  Column column(remove_trim_spaces(title));
+  Column column(trim_spaces(title));
   this->columns.push_back(column);
 }
 
 void Board::rename_column(size_t column_index, string new_title) {
-  this->columns[column_index].title = remove_trim_spaces(new_title);
+  this->columns[column_index].title = trim_spaces(new_title);
 }
 
 void Board::delete_column(size_t column_index) {

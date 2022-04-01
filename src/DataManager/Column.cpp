@@ -1,6 +1,5 @@
 #include <algorithm>
 
-#include "../helpers/remove_trim_spaces/remove_trim_spaces.h"
 #include "Column.h"
 
 Column::Column(string title) {

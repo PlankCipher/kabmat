@@ -1,6 +1,5 @@
 #pragma once
 
-#include <ncurses.h>
 #include <string>
 
 #include "../ScrollableWindow/ScrollableWindow.h"

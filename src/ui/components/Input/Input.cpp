@@ -1,6 +1,6 @@
 #include "Input.h"
 #include "../../../helpers/consts.h"
-#include "../../../helpers/remove_trim_spaces/remove_trim_spaces.h"
+#include "../../../helpers/trim_spaces/trim_spaces.h"
 
 Input::Input(int height, int width, int start_y, int start_x, string content,
              string title, bool focused)
@@ -117,7 +117,7 @@ string Input::get_value() {
       content += this->first_line_chars[i];
   }
 
-  return remove_trim_spaces(content);
+  return trim_spaces(content);
 }
 
 void Input::draw_content(vector<string> shown_content,
@@ -385,7 +385,7 @@ bool Input::insert_mode_key_handler(char key) {
     break;
   case '\b':
   case 127:
-    // BACKSPACE / DELETE
+    // Backspace / Delete
 
     if (this->multi_row) {
       if (this->content_size > 0) {

@@ -11,11 +11,14 @@ MainMenu::MainMenu(DataManager *data_manager, Config *config)
     : height{(int)(getmaxy(stdscr) * 0.3)}, width{(int)(getmaxx(stdscr) * 0.2)},
       start_y{(getmaxy(stdscr) / 2) - (this->height / 2)},
       start_x{(getmaxx(stdscr) / 2) - (this->width / 2)},
-      menu_window{ScrollableWindow<string>(
-          this->height - 3, this->width - 2, this->start_y + 2,
-          this->start_x + 1, &this->boards_names, &this->boards_count,
-          bind(&MainMenu::draw_menu_items, this, placeholders::_1,
-               placeholders::_2))} {
+      menu_window{this->height - 3,
+                  this->width - 2,
+                  this->start_y + 2,
+                  this->start_x + 1,
+                  &this->boards_names,
+                  &this->boards_count,
+                  bind(&MainMenu::draw_menu_items, this, placeholders::_1,
+                       placeholders::_2)} {
   this->window =
       newwin(this->height, this->width, this->start_y, this->start_x);
   keypad(this->window, true);
@@ -115,7 +118,7 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case 'k': {
-    // move up
+    // highlight the above board
     if (this->boards_count > 0) {
       if (--this->highlighted_index == -1) {
         this->highlighted_index = 0;
@@ -126,7 +129,7 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case 'j': {
-    // move down
+    // highlight the below board
     if (this->boards_count > 0) {
       this->highlighted_index =
           min(this->boards_count - 1, (size_t)this->highlighted_index + 1);
@@ -141,7 +144,7 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case 'g': {
-    // go to first board
+    // highlight first board
     if (this->boards_count > 0) {
       this->highlighted_index = 0;
       this->menu_window.scroll_to_top();
@@ -150,7 +153,7 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case 'G': {
-    // go to last board
+    // highlight last board
     if (this->boards_count > 0) {
       this->highlighted_index =
           min((size_t)this->menu_window.max_items_in_win - 1,
@@ -161,7 +164,7 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case 'd': {
-    // delete board
+    // delete highlighted board
     if (this->boards_count > 0) {
       string board_to_delete =
           *(this->menu_window.window_start + this->highlighted_index);
@@ -217,7 +220,7 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case 'r': {
-    // rename board
+    // rename highlighted board
     if (this->boards_count > 0) {
       string old_name =
           *(this->menu_window.window_start + this->highlighted_index);
@@ -238,7 +241,7 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case '\n': {
-    // enter board
+    // enter highlighted board
     if (this->boards_count > 0) {
       string board_to_open =
           *(this->menu_window.window_start + this->highlighted_index);
@@ -268,7 +271,6 @@ string MainMenu::create_input_window(string title, string content,
 
   int height = 3;
   int width = max_x * 0.4;
-
   int start_y = (max_y / 2) - (height / 2);
   int start_x = (max_x / 2) - (width / 2);
 

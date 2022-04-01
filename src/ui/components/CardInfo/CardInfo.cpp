@@ -36,10 +36,10 @@ void CardInfo::setup_window(Input *content_input, Input *description_input,
 bool CardInfo::show(DataManager *data_manager) {
   Input content_input =
       Input(3, this->width - 2, this->start_y + 1, this->start_x + 1,
-            this->card == NULL ? "" : this->card->content, " Content ");
-  Input description_input = Input(
-      this->height - 5, this->width - 2, this->start_y + 4, this->start_x + 1,
-      this->card == NULL ? "" : this->card->description, " Description ");
+            this->card->content, " Content ");
+  Input description_input =
+      Input(this->height - 5, this->width - 2, this->start_y + 4,
+            this->start_x + 1, this->card->description, " Description ");
 
   this->focused_input = &content_input;
   this->focused_content_input = true;
@@ -73,7 +73,7 @@ bool CardInfo::show(DataManager *data_manager) {
       break;
     }
     case '\t': {
-      // TAB
+      // Tab
       // switch focused input
       this->focused_content_input = !this->focused_content_input;
 
@@ -95,8 +95,6 @@ bool CardInfo::show(DataManager *data_manager) {
           this->card->content != "") {
         int max_y, max_x;
         getmaxyx(stdscr, max_y, max_x);
-        max_y -= 4;
-        max_x -= 2;
 
         int height = (max_y * 0.4) + 2;
         int width = max_x * 0.3;

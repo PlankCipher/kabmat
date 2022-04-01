@@ -8,7 +8,6 @@ Help::Help() {
 
   this->height = max_y * 0.5;
   this->width = max_x * 0.6;
-
   this->start_y = (max_y / 2) - (height / 2);
   this->start_x = (max_x / 2) - (width / 2);
 

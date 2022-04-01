@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../../Config/Config.h"
 #include "../../../DataManager/DataManager.h"
 #include "../../components/ScrollableWindow/ScrollableWindow.h"
 
@@ -26,8 +25,9 @@ private:
 
   DataManager *data_manager;
   Config *config;
+  int highlighted_index;
+
   vector<string> boards_names;
   size_t boards_count;
   ScrollableWindow<string> menu_window;
-  int highlighted_index;
 };

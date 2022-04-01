@@ -1,7 +1,7 @@
 #include <fstream>
 
 #include "../helpers/consts.h"
-#include "../helpers/remove_trim_spaces/remove_trim_spaces.h"
+#include "../helpers/trim_spaces/trim_spaces.h"
 #include "DataManager.h"
 
 DataManager::DataManager() {
@@ -42,7 +42,7 @@ DataManager::DataManager() {
         } else {
           // since we are parsing the data progressively, the card
           // to which this checklist item belongs is the last card we have
-          line = remove_trim_spaces(line);
+          line = trim_spaces(line);
 
           ChecklistItem checklist_item;
           checklist_item.done = line[0] == '+';
@@ -62,8 +62,7 @@ DataManager::DataManager() {
         } else
           // since we are parsing the data progressively, the column
           // to which this card belongs is the last column we have
-          this->boards.back().columns.back().add_card(
-              Card(remove_trim_spaces(line)));
+          this->boards.back().columns.back().add_card(Card(trim_spaces(line)));
 
         reading_card = true;
       } else if (line.find(" ") == 0) {
@@ -111,12 +110,12 @@ DataManager::DataManager() {
 }
 
 void DataManager::add_board(string name) {
-  Board board(remove_trim_spaces(name));
+  Board board(trim_spaces(name));
   this->boards.push_back(board);
 }
 
 void DataManager::create_board(string name) {
-  name = remove_trim_spaces(name);
+  name = trim_spaces(name);
 
   if (name.length() < 1) {
     fprintf(stderr, "ERROR: Can't create a board with empty name\n");
@@ -140,7 +139,7 @@ void DataManager::create_board(string name) {
 }
 
 void DataManager::rename_board(string old_name, string new_name) {
-  new_name = remove_trim_spaces(new_name);
+  new_name = trim_spaces(new_name);
 
   if (new_name.length() < 1) {
     fprintf(stderr, "ERROR: Board name can't be empty\n");

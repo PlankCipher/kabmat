@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ncurses.h>
-
 #include "../../../DataManager/DataManager.h"
 #include "../ScrollableWindow/ScrollableWindow.h"
 

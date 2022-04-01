@@ -1,9 +1,6 @@
 #pragma once
 
-#include "../../../Config/Config.h"
-#include "../../../DataManager/DataManager.h"
 #include "../../components/ColumnWin/ColumnWin.h"
-#include "../../components/ScrollableWindow/ScrollableWindow.h"
 
 class BoardScreen {
 public:
@@ -20,10 +17,11 @@ public:
 
 private:
   void draw_columns(vector<ColumnWin> shown_columns, WINDOW *scrollable_window);
+  void setup_columns();
+
   bool handle_key_press(char key);
   void focus_current();
 
-  void setup_columns();
   string create_input_window(string title, string content = "",
                              bool focused = false);
   bool create_card_info_window(Card *card);
@@ -32,10 +30,10 @@ private:
   Board *board;
   DataManager *data_manager;
   Config *config;
+  bool from_tui;
+
   vector<ColumnWin> columns;
   size_t columns_count;
   ScrollableWindow<ColumnWin> columns_window;
   int focused_index;
-
-  bool from_tui;
 };

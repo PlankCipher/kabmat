@@ -4,18 +4,20 @@
 #include "../../components/Footer/Footer.h"
 #include "../../components/Header/Header.h"
 #include "../../components/Help/Help.h"
-#include "../../components/Input/Input.h"
 #include "../../helpers/win_center_text/win_center_text.h"
 
 BoardScreen::BoardScreen(string board_name, DataManager *data_manager,
                          Config *config, bool from_tui)
     : height{getmaxy(stdscr) - 4}, width{getmaxx(stdscr) - 2}, start_y{2},
-      start_x{1}, columns_window{ScrollableWindow<ColumnWin>(
-                      this->height, this->width, this->start_y, this->start_x,
-                      &this->columns, &this->columns_count,
-                      bind(&BoardScreen::draw_columns, this, placeholders::_1,
-                           placeholders::_2),
-                      3)} {
+      start_x{1}, columns_window{this->height,
+                                 this->width,
+                                 this->start_y,
+                                 this->start_x,
+                                 &this->columns,
+                                 &this->columns_count,
+                                 bind(&BoardScreen::draw_columns, this,
+                                      placeholders::_1, placeholders::_2),
+                                 3} {
   this->window =
       newwin(this->height, this->width, this->start_y, this->start_x);
   keypad(this->window, true);
@@ -66,6 +68,7 @@ void BoardScreen::draw_columns(vector<ColumnWin> shown_columns,
     wrefresh(scrollable_window);
 
     for (size_t i = 0; i < shown_columns.size(); ++i) {
+      // +2 for spaces between columns
       int start_x = (i * (shown_columns[i].width + 2)) + this->start_x;
       (*(this->columns_window.window_start + i)).start_x = start_x;
       shown_columns[i].show(start_x);
@@ -102,7 +105,6 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case '?': {
-    // help
     Help help_window;
     help_window.show();
 
@@ -186,7 +188,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'H': {
-    // move card to left/prev column
+    // move focused card to left/prev column
     if (this->columns_count > 0) {
       // scroll offset + current focused index
       size_t src_index =
@@ -220,7 +222,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'L': {
-    // move card to right/next column
+    // move focused card to right/next column
     if (this->columns_count > 0) {
       // scroll offset + current focused index
       size_t src_index =
@@ -254,7 +256,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'K': {
-    // move card up in column
+    // move focused card up in column
     if (this->columns_count > 0) {
       vector<ColumnWin> shown_columns =
           this->columns_window.get_current_window();
@@ -267,7 +269,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'J': {
-    // move card down in column
+    // move focused card down in column
     if (this->columns_count > 0) {
       vector<ColumnWin> shown_columns =
           this->columns_window.get_current_window();
@@ -281,7 +283,7 @@ bool BoardScreen::handle_key_press(char key) {
   }
   case ('h' & 0x1f): {
     // ctrl + h
-    // move column to the left
+    // move focused column to the left
     if (this->columns_count > 0) {
       size_t col_to_mov_index =
           (this->columns_window.window_start - this->columns.begin()) +
@@ -305,7 +307,7 @@ bool BoardScreen::handle_key_press(char key) {
   }
   case ('l' & 0x1f): {
     // ctrl + l
-    // move column to the right
+    // move focused column to the right
     if (this->columns_count > 0) {
       size_t col_to_mov_index =
           (this->columns_window.window_start - this->columns.begin()) +
@@ -358,7 +360,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'E': {
-    // edit title of highlighted column
+    // edit title of focused column
     if (this->columns_count > 0) {
       size_t col_to_rename_index =
           (this->columns_window.window_start - this->columns.begin()) +
@@ -377,7 +379,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'D': {
-    // delete highlighted column
+    // delete focused column
     if (this->columns_count > 0) {
       size_t col_to_del_index =
           (this->columns_window.window_start - this->columns.begin()) +
@@ -406,7 +408,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'c': {
-    // create card
+    // create a card in focused column
     if (this->columns_count > 0) {
       Card card = Card("");
       bool canceled = this->create_card_info_window(&card);
@@ -420,7 +422,7 @@ bool BoardScreen::handle_key_press(char key) {
 
         this->setup_columns();
 
-        // highlight the just created card
+        // focus the just created card
         vector<ColumnWin> shown_columns =
             this->columns_window.get_current_window();
         shown_columns[this->focused_index].focus_last();
@@ -434,7 +436,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'e': {
-    // edit card
+    // edit focused card
     if (this->columns_count > 0) {
       size_t focused_col_index = this->columns_window.window_start -
                                  this->columns.begin() + this->focused_index;
@@ -468,7 +470,7 @@ bool BoardScreen::handle_key_press(char key) {
     break;
   }
   case 'd': {
-    // delete card
+    // delete focused card
     if (this->columns_count > 0) {
       size_t focused_col_index = this->columns_window.window_start -
                                  this->columns.begin() + this->focused_index;
@@ -519,7 +521,6 @@ string BoardScreen::create_input_window(string title, string content,
 
   int height = 3;
   int width = max_x * 0.4;
-
   int start_y = (max_y / 2) - (height / 2);
   int start_x = (max_x / 2) - (width / 2);
 
@@ -533,10 +534,13 @@ string BoardScreen::create_input_window(string title, string content,
 }
 
 bool BoardScreen::create_card_info_window(Card *card) {
-  int height = this->height * 0.4;
-  int width = this->width * 0.5;
-  int start_y = (this->height / 2) - (height / 2);
-  int start_x = (this->width / 2) - (width / 2);
+  int max_y, max_x;
+  getmaxyx(stdscr, max_y, max_x);
+
+  int height = max_y * 0.4;
+  int width = max_x * 0.5;
+  int start_y = (max_y / 2) - (height / 2);
+  int start_x = (max_x / 2) - (width / 2);
 
   CardInfo card_info_window = CardInfo(height, width, start_y, start_x, card);
   bool canceled = card_info_window.show(this->data_manager);

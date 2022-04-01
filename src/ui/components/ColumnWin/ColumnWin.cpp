@@ -59,8 +59,8 @@ void ColumnWin::draw_cards(vector<CardWin> shown_cards,
                            WINDOW *scrollable_window) {
   if (shown_cards.size() > 0) {
     for (size_t i = 0; i < shown_cards.size(); ++i) {
-      // +1 to skip the column window border
-      int start_y = this->start_y + (i * (shown_cards[i].height) + 1);
+      // +1 to skip the column window upper border
+      int start_y = this->start_y + (i * shown_cards[i].height + 1);
       shown_cards[i].show(start_y, this->start_x + 1);
     }
   } else {

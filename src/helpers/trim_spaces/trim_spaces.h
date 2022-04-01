@@ -4,4 +4,4 @@
 
 using namespace std;
 
-string remove_trim_spaces(string str);
+string trim_spaces(string str);

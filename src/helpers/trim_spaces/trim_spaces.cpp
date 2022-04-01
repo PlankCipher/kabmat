@@ -1,6 +1,6 @@
-#include "remove_trim_spaces.h"
+#include "trim_spaces.h"
 
-string remove_trim_spaces(string str) {
+string trim_spaces(string str) {
   size_t first_non_space = str.find_first_not_of(' ');
 
   // if can't find a non space character

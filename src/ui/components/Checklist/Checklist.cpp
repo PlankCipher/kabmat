@@ -45,7 +45,7 @@ void Checklist::setup_window() {
     // add [x/y] to title
     window_title += " [" + to_string(done_count) + "/" + to_string(total) + "]";
 
-    // progress bar |[===== ] zzz%|
+    // progress bar |[====  ] zzz%|
     int done_percent = (done_count / (float)total) * 100;
 
     string progress_bar = "";
@@ -93,7 +93,7 @@ void Checklist::show() {
       break;
     }
     case 'g': {
-      // go to first item
+      // highlight first item
       if (this->checklist_items_count > 0) {
         this->highlighted_index = 0;
         this->checklist_items_window.scroll_to_top();
@@ -102,7 +102,7 @@ void Checklist::show() {
       break;
     }
     case 'G': {
-      // go to last board
+      // highlight last board
       if (this->checklist_items_count > 0) {
         this->highlight_last();
       }
@@ -256,10 +256,14 @@ void Checklist::draw_checklist_items(
   if (shown_items.size() > 0) {
     // draw items
     for (size_t i = 0; i < shown_items.size(); ++i) {
+      // the [x] or [ ] before item content
       string item = "[";
       item += shown_items[i].done ? 'x' : ' ';
       item += "] ";
+
+      // actual item content
       item += shown_items[i].content;
+
       mvwprintw(this->window, i + 2, 1, "%s",
                 win_fit_text(this->window, item).c_str());
     }
@@ -321,7 +325,6 @@ string Checklist::create_input_window(string content) {
 
   int height = 3;
   int width = max_x * 0.4;
-
   int start_y = (max_y / 2) - (height / 2);
   int start_x = (max_x / 2) - (width / 2);
 
