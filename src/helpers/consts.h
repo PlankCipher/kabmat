@@ -1,7 +1,7 @@
 #pragma once
 
 #define NAME "kabmat"
-#define VERSION "2.6.1"
+#define VERSION "2.6.2"
 #define DATA_FILE (string(getenv("HOME")) + "/.local/share/kabmat/data")
 
 #define COLOR_PAIR_FOOTER 1

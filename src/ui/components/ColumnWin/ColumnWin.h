@@ -36,6 +36,8 @@ public:
   size_t cards_count;
   int focused_index;
 
+  size_t cards_window_offset;
+
   Column *column;
 
 private:
@@ -44,6 +46,4 @@ private:
 
   vector<CardWin> cards;
   ScrollableWindow<CardWin> cards_window;
-
-  size_t cards_window_offset;
 };

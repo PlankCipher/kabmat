@@ -181,6 +181,9 @@ void MainMenu::handle_key_press(char key) {
       this->setup_window();
 
       if (confirmed) {
+        size_t prev_offset =
+            this->menu_window.window_start - this->boards_names.begin();
+
         this->data_manager->delete_board(board_to_delete);
 
         this->boards_names = data_manager->get_boards_names();
@@ -188,7 +191,7 @@ void MainMenu::handle_key_press(char key) {
 
         this->highlighted_index =
             min((size_t)this->highlighted_index, this->boards_count - 1);
-        this->menu_window.scroll_to_top();
+        this->menu_window.scroll_to_offset(prev_offset);
       }
     }
 

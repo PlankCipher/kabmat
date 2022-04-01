@@ -309,6 +309,9 @@ bool Input::normal_mode_key_handler(char key) {
     break;
   case 'd':
     if (this->multi_row && this->content_size > 0) {
+      size_t prev_offset =
+          this->content_window.window_start - this->content.begin();
+
       this->content.erase(this->content_window.window_start + this->cursor_y -
                           1);
       this->content_size--;
@@ -324,7 +327,7 @@ bool Input::normal_mode_key_handler(char key) {
                         this->content[this->curr_line_index()].length()),
                     (size_t)1);
 
-      this->content_window.scroll_to_top();
+      this->content_window.scroll_to_offset(prev_offset);
     }
 
     break;

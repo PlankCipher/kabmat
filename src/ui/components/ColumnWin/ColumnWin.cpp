@@ -106,6 +106,9 @@ void ColumnWin::unfocus() {
 
 void ColumnWin::focus_current() {
   if (this->cards_count > 0) {
+    this->focused_index =
+        min((size_t)this->focused_index, this->cards_count - 1);
+
     this->setup_cards_window();
     vector<CardWin> shown_cards = this->cards_window.get_current_window();
 

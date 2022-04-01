@@ -391,21 +391,15 @@ bool BoardScreen::handle_key_press(char key) {
       bool confirmed = this->create_confirm_dialog(message);
 
       if (confirmed) {
+        size_t prev_offset =
+            this->columns_window.window_start - this->columns.begin();
         this->data_manager->delete_column(this->board, col_to_del_index);
 
-        this->columns = {};
-        for (size_t i = 0; i < this->board->columns.size(); ++i) {
-          // -4 because of 2 spaces between
-          // each pair of shown columns
-          int width = (this->width - 4) / 3;
-          this->columns.push_back(ColumnWin(this->height, width, this->start_y,
-                                            &this->board->columns[i]));
-        }
-        this->columns_count = this->columns.size();
+        this->setup_columns();
 
         this->focused_index =
             min((size_t)this->focused_index, this->columns_count - 1);
-        this->columns_window.scroll_to_top();
+        this->columns_window.scroll_to_offset(prev_offset);
       }
     }
 
@@ -455,9 +449,16 @@ bool BoardScreen::handle_key_press(char key) {
         bool canceled = this->create_card_info_window(card);
 
         if (!canceled && card->content != "") {
+          size_t prev_offset =
+              this->columns[focused_col_index].cards_window_offset;
+          size_t prev_focused_index =
+              this->columns[focused_col_index].focused_index;
+
           this->data_manager->update_card(column, focused_card_index, *card);
 
           this->setup_columns();
+          this->columns[focused_col_index].cards_window_offset = prev_offset;
+          this->columns[focused_col_index].focused_index = prev_focused_index;
 
           this->columns_window.draw();
         }
@@ -488,9 +489,17 @@ bool BoardScreen::handle_key_press(char key) {
         bool confirmed = this->create_confirm_dialog(message);
 
         if (confirmed) {
+          size_t prev_offset =
+              this->columns[focused_col_index].cards_window_offset;
+          size_t prev_focused_index =
+              this->columns[focused_col_index].focused_index;
+
           this->data_manager->delete_card(column, card_to_del_index);
 
           this->setup_columns();
+          this->columns[focused_col_index].cards_window_offset = prev_offset;
+          this->columns[focused_col_index].focused_index = prev_focused_index;
+
           this->columns_window.draw();
         }
       }

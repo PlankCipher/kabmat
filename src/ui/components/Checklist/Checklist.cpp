@@ -224,6 +224,8 @@ void Checklist::show() {
             (this->checklist_items_window.window_start -
              this->checklist_items.begin()) +
             this->highlighted_index;
+        size_t prev_offset = this->checklist_items_window.window_start -
+                             this->checklist_items.begin();
 
         this->data_manager->delete_checklist_item(this->card,
                                                   highlighted_item_index);
@@ -233,7 +235,7 @@ void Checklist::show() {
 
         this->highlighted_index = min((size_t)this->highlighted_index,
                                       this->checklist_items_count - 1);
-        this->checklist_items_window.scroll_to_top();
+        this->checklist_items_window.scroll_to_offset(prev_offset);
       }
 
       break;
