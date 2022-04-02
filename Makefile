@@ -33,3 +33,5 @@ clean:
 install:
 	$(MAKE)
 	sudo cp ./$(TARGET) $(INSTALL_DIR)
+	sudo mkdir -p /usr/local/man/man1
+	sudo cp ./doc/kabmat.1 /usr/local/man/man1/

@@ -1,0 +1,308 @@
+.TH KABMAT 1 2022-04-02 2.6.7
+
+.SH NAME
+kabmat \- kanban board management TUI program
+
+.SH SYNOPSIS
+.B kabmat
+[\fBOPTION\fR]...
+[\fB\-t|\-o\fR]
+
+.SH DESCRIPTION
+.B kabmat
+is an ncurses-based kanban boards manager with vim-like keybindings.
+
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Print help message.
+.TP
+.BR \-v ", " \-\-version
+Print version.
+
+.TP
+.BR \-l ", " \-\-list
+List all boards.
+.TP
+.BR \-c ", " \-\-create \ \fIname
+Create a new board with the given \fIname.
+.TP
+.BR \-o ", " \-\-open \ \fIname
+Open board with the given \fIname. This option shouldn't be used with the \fB\-t\fR option.
+.TP
+.BR \-d ", " \-\-delete \ \fIname
+Delete board with the given \fIname.
+
+.TP
+.BR \-t ", " \-\-text
+Disable tui (e.g. when you want to just create a board and not enter it (useful for scripts)).
+.TP
+.BR \-b ", " \-\-card-at-bottom
+When moving cards between columns, put them at the bottom.
+
+.SH KEYBINDINGS
+.SS Help Window
+.TP
+.B k
+scroll up one line
+.TP
+.B j
+scroll down one line
+.TP
+.B q
+close the window
+
+.SS Main Menu
+.TP
+.B q
+quit
+.TP
+.B ?
+show help window
+.TP
+.B k
+highlight the above board name
+.TP
+.B j
+highlight the below board name
+.TP
+.B g
+highlight the first board name
+.TP
+.B G
+highlight the last board name
+.TP
+.B d
+delete the currently highlighted board
+.TP
+.B r
+rename the currently highlighted board
+.TP
+.B c
+create a new board and highlight it
+.TP
+.B <Enter>
+open the currently highlighted board
+
+.SS Input Field (Normal mode)
+.TP
+.B <Esc>, q
+cancel and close the input field
+.TP
+.B <Enter>
+submit and close the input field
+.TP
+.B h
+move cursor one character to the left
+.TP
+.B l
+move cursor one character to the right
+.TP
+.B 0
+move cursor to the start of the line
+.TP
+.B $
+move cursor to the end of the line
+.TP
+.B k
+move cursor up one line (in multi-row input only)
+.TP
+.B j
+move cursor down one line (in multi-row input only)
+.TP
+.B g
+move cursor to the first line (in multi-row input only)
+.TP
+.B G
+move cursor to the last line (in multi-row input only)
+.TP
+.B i
+change mode to insert
+.TP
+.B a
+move cursor one character to the right and change mode to insert
+.TP
+.B I
+move cursor to the start of the line and change mode to insert
+.TP
+.B A
+move cursor to the end of the line and change mode to insert
+.TP
+.B S
+delete everything on the line and change mode to insert
+.TP
+.B d
+delete line under cursor (in multi-row input only)
+
+.SS Input Field (Insert mode)
+.TP
+.B <Esc>
+change mode to normal
+.TP
+.B <Enter>
+submit and close the input field (or add a new line in multi-row input)
+.TP
+.B <Backspace>/<Delete>
+delete the character before the cursor
+.TP
+.B (Any other key is inserted before the cursor)
+
+.SS Confirmation Window
+.TP
+.B <Enter>, y
+confirm action (yes)
+.TP
+.B <Esc>, n
+cancel action (no)
+
+
+.SS Board Screen
+.TP
+.B q
+quit to where the board was opened from (main menu or cli)
+.TP
+.B ?
+show help window
+.TP
+.B h
+focus the left column
+.TP
+.B l
+focus the right column
+.TP
+.B k
+focus the above card
+.TP
+.B j
+focus the below card
+.TP
+.B g
+focus the first card
+.TP
+.B G
+focus the last card
+.TP
+.B H
+move focused card to the left column
+.TP
+.B L
+move focused card to the right column
+.TP
+.B K
+move focused card up
+.TP
+.B J
+move focused card down
+.TP
+.B <C\-h>
+move focused column to the left
+.TP
+.B <C\-l>
+move focused column to the right
+.TP
+.B C
+create a new column
+.TP
+.B E
+edit title of focused column
+.TP
+.B D
+delete focused column
+.TP
+.B c
+create a new card in focused column
+.TP
+.B e
+edit focused card
+.TP
+.B d
+delete focused card
+
+
+.SS Card Info Window
+.TP
+.B q
+cancel and close (if in normal mode)
+.TP
+.B <Enter>
+submit and close (if in normal mode)
+.TP
+.B <Tab>
+switch focused input (content or description)
+.TP
+.B c
+open checklist items window
+.TP
+.B (Any other key gets handled by the focused input)
+
+
+.SS Checklist Window
+.TP
+.B q
+close the window
+.TP
+.B k
+highlight the item above
+.TP
+.B j
+highlight the item below
+.TP
+.B g
+highlight the first item
+.TP
+.B G
+highlight the last item
+.TP
+.B K
+move highlighted item up
+.TP
+.B J
+move highlighted item down
+.TP
+.B c
+add a new item to the list
+.TP
+.B e
+edit content of highlighted item
+.TP
+.B <Space>
+toggle highlighted item (done/not done)
+.TP
+.B d
+delete highlighted item
+
+.SH FILES
+.TP
+.I $HOME/.local/share/kabmat/data
+Main data file (see NOTES for info about syntax in this file).
+.TP
+.I $HOME/.local/share/kabmat/data_bkp
+A backup file to which content of main data file is copied before writing anything into main date file to minimize data loss on crashes.
+
+.SH NOTES
+The syntax of the data file simply depends on indentation. Here is how. (The start and end of a line are marked with \fB^\fR and \fB$\fR respectively for demo purposes only)
+.PP
+^a board's name$
+.PP
+^ a column's name in that board$
+.PP
+^  a card's content in that column$
+.PP
+^   \-a not done checklist item in that card$
+.PP
+^   +a done checklist item in that card$
+.PP
+^    Description of this card.$
+.PP
+^    The description of the card can be multi-line$
+.PP
+^another board starts here$
+.PP
+^ and so on...$
+.PP
+Each line is an entry. A board's name has no spaces before it. A column's title has 1. A card's content has 2. A card's checklist item has 3. A card's description has 4.
+.PP
+A checklist item is marked not done by adding a \- before its content and marked done by adding + before it.
+
+.SH AUTHOR
+PlankCipher <https://github.com/PlankCipher>

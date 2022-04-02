@@ -97,5 +97,7 @@ void ArgsParser::usage() {
   cout << "  -t, --text              disable tui" << endl;
   cout << "  -b, --card-at-bottom    when moving cards between columns, put "
           "them at the bottom"
+       << endl
        << endl;
+  cout << "Consult the man page for more information" << endl;
 }
