@@ -500,7 +500,9 @@ bool BoardScreen::handle_key_press(char key) {
 
           this->setup_columns();
           this->columns[focused_col_index].cards_window_offset = prev_offset;
-          this->columns[focused_col_index].focused_index = prev_focused_index;
+          this->columns[focused_col_index].focused_index =
+              min(prev_focused_index,
+                  this->columns[focused_col_index].cards_count - 1);
 
           this->columns_window.draw();
         }

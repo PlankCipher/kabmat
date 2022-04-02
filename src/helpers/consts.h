@@ -1,7 +1,7 @@
 #pragma once
 
 #define NAME "kabmat"
-#define VERSION "2.6.6"
+#define VERSION "2.6.7"
 #define DATA_FILE (string(getenv("HOME")) + "/.local/share/kabmat/data")
 #define DATA_BACKUP_FILE                                                       \
   (string(getenv("HOME")) + "/.local/share/kabmat/data_bkp")
