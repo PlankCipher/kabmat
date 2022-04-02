@@ -11,6 +11,9 @@ public:
   void rename_board(string old_name, string new_name);
   void delete_board(string name);
 
+  bool move_board_up(size_t board_index);
+  bool move_board_down(size_t board_index);
+
   Board *get_board_if_exists(string name);
   vector<string> get_boards_names();
 

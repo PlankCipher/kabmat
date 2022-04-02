@@ -38,6 +38,8 @@ void Help::show() {
       "j         highlight the below board name",
       "g         highlight the first board name",
       "G         highlight the last board name",
+      "K         move highlighted board up",
+      "J         move highlighted board down",
       "d         delete the currently highlighted board",
       "r         rename the currently highlighted board",
       "c         create a new board and highlight it",

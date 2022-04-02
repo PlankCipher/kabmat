@@ -165,6 +165,32 @@ void DataManager::delete_board(string name) {
   this->write_data_to_file();
 }
 
+bool DataManager::move_board_up(size_t board_index) {
+  bool moved = false;
+
+  if (board_index > 0) {
+    swap(this->boards[board_index], this->boards[board_index - 1]);
+    moved = true;
+  }
+
+  this->write_data_to_file();
+
+  return moved;
+}
+
+bool DataManager::move_board_down(size_t board_index) {
+  bool moved = false;
+
+  if (board_index < this->boards.size() - 1) {
+    swap(this->boards[board_index], this->boards[board_index + 1]);
+    moved = true;
+  }
+
+  this->write_data_to_file();
+
+  return moved;
+}
+
 Board *DataManager::get_board_if_exists(string name) {
   for (size_t i = 0; i < this->boards.size(); ++i)
     if (this->boards[i].name == name)

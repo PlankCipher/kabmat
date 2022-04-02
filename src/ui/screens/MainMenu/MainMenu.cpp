@@ -118,28 +118,11 @@ void MainMenu::handle_key_press(char key) {
     break;
   }
   case 'k': {
-    // highlight the above board
-    if (this->boards_count > 0) {
-      if (--this->highlighted_index == -1) {
-        this->highlighted_index = 0;
-        this->menu_window.scroll_up();
-      } else
-        this->highlight_current();
-    }
+    this->highlight_above();
     break;
   }
   case 'j': {
-    // highlight the below board
-    if (this->boards_count > 0) {
-      this->highlighted_index =
-          min(this->boards_count - 1, (size_t)this->highlighted_index + 1);
-
-      if (this->highlighted_index == this->menu_window.max_items_in_win) {
-        this->highlighted_index = this->menu_window.max_items_in_win - 1;
-        this->menu_window.scroll_down();
-      } else
-        this->highlight_current();
-    }
+    this->highlight_below();
 
     break;
   }
@@ -159,6 +142,46 @@ void MainMenu::handle_key_press(char key) {
           min((size_t)this->menu_window.max_items_in_win - 1,
               this->boards_count - 1);
       this->menu_window.scroll_to_bottom();
+    }
+
+    break;
+  }
+  case 'K': {
+    // move highlighted board up
+    if (this->boards_count > 0) {
+      size_t highlighted_board_index =
+          (this->menu_window.window_start - this->boards_names.begin()) +
+          this->highlighted_index;
+      size_t prev_offset =
+          this->menu_window.window_start - this->boards_names.begin();
+
+      bool moved = this->data_manager->move_board_up(highlighted_board_index);
+
+      if (moved) {
+        this->boards_names = this->data_manager->get_boards_names();
+        this->menu_window.scroll_to_offset(prev_offset);
+        this->highlight_above();
+      }
+    }
+
+    break;
+  }
+  case 'J': {
+    // move highlighted board down
+    if (this->boards_count > 0) {
+      size_t highlighted_board_index =
+          (this->menu_window.window_start - this->boards_names.begin()) +
+          this->highlighted_index;
+      size_t prev_offset =
+          this->menu_window.window_start - this->boards_names.begin();
+
+      bool moved = this->data_manager->move_board_down(highlighted_board_index);
+
+      if (moved) {
+        this->boards_names = this->data_manager->get_boards_names();
+        this->menu_window.scroll_to_offset(prev_offset);
+        this->highlight_below();
+      }
     }
 
     break;
@@ -189,7 +212,7 @@ void MainMenu::handle_key_press(char key) {
 
         this->data_manager->delete_board(board_to_delete);
 
-        this->boards_names = data_manager->get_boards_names();
+        this->boards_names = this->data_manager->get_boards_names();
         this->boards_count = this->boards_names.size();
 
         this->highlighted_index =
@@ -261,6 +284,29 @@ void MainMenu::handle_key_press(char key) {
     }
     break;
   }
+  }
+}
+
+void MainMenu::highlight_above() {
+  if (this->boards_count > 0) {
+    if (--this->highlighted_index == -1) {
+      this->highlighted_index = 0;
+      this->menu_window.scroll_up();
+    } else
+      this->highlight_current();
+  }
+}
+
+void MainMenu::highlight_below() {
+  if (this->boards_count > 0) {
+    this->highlighted_index =
+        min(this->boards_count - 1, (size_t)this->highlighted_index + 1);
+
+    if (this->highlighted_index == this->menu_window.max_items_in_win) {
+      this->highlighted_index = this->menu_window.max_items_in_win - 1;
+      this->menu_window.scroll_down();
+    } else
+      this->highlight_current();
   }
 }
 
