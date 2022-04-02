@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <fstream>
 
 #include "../helpers/consts.h"
@@ -291,6 +292,11 @@ bool DataManager::move_checklist_item_down(Card *card, size_t item_index) {
 }
 
 void DataManager::write_data_to_file() {
+  // copy data to backup file before writing
+  filesystem::copy_file(DATA_FILE, DATA_BACKUP_FILE,
+                        filesystem::copy_options::overwrite_existing);
+
+  // write data
   fstream data_file;
   data_file.open(DATA_FILE, ios::out | ios::trunc);
 
