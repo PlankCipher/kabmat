@@ -35,3 +35,9 @@ install:
 	sudo cp ./$(TARGET) $(INSTALL_DIR)
 	sudo mkdir -p /usr/local/man/man1
 	sudo cp ./doc/kabmat.1 /usr/local/man/man1/
+	rm -rf $(BUILD_DIR) $(TARGET)
+
+.PHONY: uninstall
+uninstall:
+	sudo rm -rf $(INSTALL_DIR)/$(TARGET)
+	sudo rm -rf /usr/local/man/man1/kabmat.1
