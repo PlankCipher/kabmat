@@ -22,7 +22,7 @@ TUI program for managing kanban boards with vim-like keybindings
 ## Usage
 
 ```
-kabmat 2.7.0
+kabmat 2.7.1
 TUI program for managing kanban boards with vim-like keybindings
 
 Usage: kabmat [OPTION]...
@@ -112,28 +112,28 @@ I tried making the keybindings as intuitive and expected as possible, and for th
 
 ### Board Screen:
 
-| Key     | Function                                                   |
-| ------- | ---------------------------------------------------------- |
-| q       | quit to where the board was opened from (main menu or cli) |
-| ?       | show help window                                           |
-| h       | focus the left column                                      |
-| l       | focus the right column                                     |
-| k       | focus the above card                                       |
-| j       | focus the below card                                       |
-| g       | focus the first card                                       |
-| G       | focus the last card                                        |
-| H       | move focused card to the left column                       |
-| L       | move focused card to the right column                      |
-| K       | move focused card up                                       |
-| J       | move focused card down                                     |
-| \<C-h\> | move focused column to the left                            |
-| \<C-l\> | move focused column to the right                           |
-| C       | create a new column                                        |
-| E       | edit title of focused column                               |
-| D       | delete focused column                                      |
-| c       | create a new card in focused column                        |
-| e       | edit focused card                                          |
-| d       | delete focused card                                        |
+| Key              | Function                                                   |
+| ---------------- | ---------------------------------------------------------- |
+| q                | quit to where the board was opened from (main menu or cli) |
+| ?                | show help window                                           |
+| h                | focus the left column                                      |
+| l                | focus the right column                                     |
+| k                | focus the above card                                       |
+| j                | focus the below card                                       |
+| g                | focus the first card                                       |
+| G                | focus the last card                                        |
+| H                | move focused card to the left column                       |
+| L                | move focused card to the right column                      |
+| K                | move focused card up                                       |
+| J                | move focused card down                                     |
+| \<C-h\>, \<C-p\> | move focused column to the left                            |
+| \<C-l\>, \<C-n\> | move focused column to the right                           |
+| C                | create a new column                                        |
+| E                | edit title of focused column                               |
+| D                | delete focused column                                      |
+| c                | create a new card in focused column                        |
+| e                | edit focused card                                          |
+| d                | delete focused card                                        |
 
 ### Card Info Window:
 

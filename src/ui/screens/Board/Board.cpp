@@ -281,8 +281,8 @@ bool BoardScreen::handle_key_press(char key) {
 
     break;
   }
-  case ('h' & 0x1f): {
-    // ctrl + h
+  case ('p' & 0x1f):   // ctrl + p
+  case ('h' & 0x1f): { // ctrl + h
     // move focused column to the left
     if (this->columns_count > 0) {
       size_t col_to_mov_index =
@@ -305,8 +305,8 @@ bool BoardScreen::handle_key_press(char key) {
 
     break;
   }
-  case ('l' & 0x1f): {
-    // ctrl + l
+  case ('n' & 0x1f):   // ctrl + n
+  case ('l' & 0x1f): { // ctrl + l
     // move focused column to the right
     if (this->columns_count > 0) {
       size_t col_to_mov_index =
