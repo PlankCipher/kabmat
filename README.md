@@ -177,7 +177,3 @@ static Key keys[] = {
     ....
 };
 ```
-
-## NOTE
-
-I have only compiled and tested this program on Linux, so I don't know how it would act on other operating systems.
