@@ -42,11 +42,10 @@ clean:
 
 .PHONY: install
 install:
-	$(MAKE)
 	install -dm755 $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)/man1
 	install -Dm755 ./$(TARGET) $(DESTDIR)$(BINDIR)
 	install -Dm644 ./doc/kabmat.1 $(DESTDIR)$(MANDIR)/man1
-	rm -rf $(BUILD_DIR) $(TARGET)
+	$(MAKE) clean
 
 .PHONY: uninstall
 uninstall:

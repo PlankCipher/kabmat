@@ -15,7 +15,8 @@ TUI program for managing kanban boards with vim-like keybindings
 
 1. get the source code from latest release or clone this repo => `git clone https://github.com/PlankCipher/kabmat.git`
 2. cd into the source code or cloned repo => `cd kabmat`
-3. run `sudo make install` to build and install the program
+3. run `make` to build the program
+4. run `sudo make install` to install it
 
 ## Usage
 
