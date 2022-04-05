@@ -1,7 +1,18 @@
+# Common prefix for installation directories, following GNU conventions.
+# See https://www.gnu.org/prep/standards/html_node/Directory-Variables.html for details.
+
+# Installation prefix
+PREFIX = /usr/local
+DATAROOTDIR = $(PREFIX)/share
+
+# Where to put the executable.
+BINDIR = $(PREFIX)/bin
+# Where to put the manual pages.
+MANDIR = $(DATAROOTDIR)/man
+
 TARGET = kabmat
 SRC_DIR = src
 BUILD_DIR = bin
-INSTALL_DIR = /usr/bin/
 DATA_DIR = ~/.local/share/kabmat
 
 CFLAGS = -std=c++17 -Wall -Wextra
@@ -32,12 +43,12 @@ clean:
 .PHONY: install
 install:
 	$(MAKE)
-	sudo cp ./$(TARGET) $(INSTALL_DIR)
-	sudo mkdir -p /usr/local/man/man1
-	sudo cp ./doc/kabmat.1 /usr/local/man/man1/
+	install -dm755 $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)/man1
+	install -Dm755 ./$(TARGET) $(DESTDIR)$(BINDIR)
+	install -Dm644 ./doc/kabmat.1 $(DESTDIR)$(MANDIR)/man1
 	rm -rf $(BUILD_DIR) $(TARGET)
 
 .PHONY: uninstall
 uninstall:
-	sudo rm -rf $(INSTALL_DIR)/$(TARGET)
-	sudo rm -rf /usr/local/man/man1/kabmat.1
+	rm $(DESTDIR)$(BINDIR)/$(TARGET)
+	rm $(DESTDIR)$(MANDIR)/man1/kabmat.1
