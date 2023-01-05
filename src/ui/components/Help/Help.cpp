@@ -106,7 +106,7 @@ void Help::show() {
       "",
       "",
       "Card Info Window keybindings:",
-      "q         cancel and close (if in normal mode)",
+      "<Esc>, q  cancel and close (if in normal mode)",
       "<Enter>   submit and close (if in normal mode)",
       "<Tab>     switch focused input (content or description)",
       "c         open checklist items window",

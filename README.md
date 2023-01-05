@@ -138,7 +138,7 @@ I tried making the keybindings as intuitive and expected as possible, and for th
 
 | Key           | Function                                      |
 | ------------- | --------------------------------------------- |
-| q             | cancel and close (if in normal mode)          |
+| \<Esc\>, q    | cancel and close (if in normal mode)          |
 | \<Enter\>     | submit and close (if in normal mode)          |
 | \<Tab\>       | switch focused input (content or description) |
 | c             | open checklist items window                   |
