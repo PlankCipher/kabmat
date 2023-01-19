@@ -12,7 +12,7 @@ TUI program for managing kanban boards with vim-like keybindings
 
 </div>
 
-# Preview
+## Preview
 
 ![kabmat](./assets/kabmat.gif)
 
