@@ -242,6 +242,7 @@ void MainMenu::handle_key_press(char key) {
 
     break;
   }
+  case 'e':
   case 'r': {
     // rename highlighted board
     if (this->boards_count > 0) {

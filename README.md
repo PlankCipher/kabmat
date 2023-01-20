@@ -33,7 +33,7 @@ TUI program for managing kanban boards with vim-like keybindings
 ## Usage
 
 ```
-kabmat 2.7.1
+kabmat 2.8.0
 TUI program for managing kanban boards with vim-like keybindings
 
 Usage: kabmat [OPTION]...
@@ -78,7 +78,7 @@ I tried making the keybindings as intuitive and expected as possible, and for th
 | K         | move highlighted board up              |
 | J         | move highlighted board down            |
 | d         | delete the currently highlighted board |
-| r         | rename the currently highlighted board |
+| r, e      | rename the currently highlighted board |
 | c         | create a new board and highlight it    |
 | \<Enter\> | open the currently highlighted board   |
 
