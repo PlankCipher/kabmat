@@ -51,6 +51,7 @@ bool CardInfo::show(DataManager *data_manager) {
   bool canceled = false;
   while (!done && (key = wgetch(this->window))) {
     switch (key) {
+    case 27: // ESC
     case 'q': {
       // cancel and close if in normal mode
       if (this->focused_input->mode == MODE_NORMAL) {
