@@ -55,7 +55,7 @@ Consult the man page for more information
 
 ## Keybindings in `kabmat`
 
-I tried making the keybindings as intuitive and expected as possible, and for the most part they are. For example, generally `c` creates an entity, `d` deletes, `k` moves up, `j` move down, etc...
+I tried making the keybindings as intuitive and expected as possible, and for the most part they are. For example, generally `c` creates an entity, `d` deletes, `k` moves up, `j` moves down, etc...
 
 ### Help Window:
 
