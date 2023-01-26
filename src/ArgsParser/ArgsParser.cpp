@@ -49,28 +49,27 @@ ArgsParser::ArgsParser(int argc, char **argv, DataManager *data_manager,
 
 void ArgsParser::parse_argument(string argument, string value,
                                 DataManager *data_manager, Config *config) {
-  if (argument.compare("-v") == 0 || argument.compare("--version") == 0) {
+  if (argument == "-v" || argument == "--version") {
     config->tui_enabled = false;
     cout << NAME << ' ' << VERSION << endl;
-  } else if (argument.compare("-h") == 0 || argument.compare("--help") == 0) {
+  } else if (argument == "-h" || argument == "--help") {
     config->tui_enabled = false;
     this->usage();
-  } else if (argument.compare("-c") == 0 || argument.compare("--create") == 0) {
+  } else if (argument == "-c" || argument == "--create") {
     data_manager->create_board(value);
-  } else if (argument.compare("-l") == 0 || argument.compare("--list") == 0) {
+  } else if (argument == "-l" || argument == "--list") {
     config->tui_enabled = false;
     vector<string> boards_names = data_manager->get_boards_names();
     for (size_t i = 0; i < boards_names.size(); ++i)
       cout << boards_names[i] << endl;
-  } else if (argument.compare("-o") == 0 || argument.compare("--open") == 0) {
+  } else if (argument == "-o" || argument == "--open") {
     data_manager->get_board_if_exists(value);
     config->default_board = value;
-  } else if (argument.compare("-d") == 0 || argument.compare("--delete") == 0) {
+  } else if (argument == "-d" || argument == "--delete") {
     data_manager->delete_board(value);
-  } else if (argument.compare("-t") == 0 || argument.compare("--text") == 0) {
+  } else if (argument == "-t" || argument == "--text") {
     config->tui_enabled = false;
-  } else if (argument.compare("-b") == 0 ||
-             argument.compare("--card-at-bottom") == 0) {
+  } else if (argument == "-b" || argument == "--card-at-bottom") {
     config->move_card_to_column_bottom = true;
   }
 }
